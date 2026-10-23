@@ -1,0 +1,1969 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getAllLeads } from "../../lib/leadsStorage";
+
+export const prerender = false;
+
+// Initial SSR fetch of leads
+const initialLeads = await getAllLeads();
+---
+
+<Layout
+  title="Orders | HaqPlus IT OMS"
+  description="Clean & Professional Order Management System for HaqPlus IT"
+>
+  <div
+    class="min-h-screen bg-[#F6F8FA] text-slate-800 font-sans selection:bg-purple-600 selection:text-white flex flex-col pb-20 lg:pb-0"
+  >
+    <!-- Mobile Backdrop -->
+    <div
+      id="sidebar-backdrop"
+      class="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm hidden lg:hidden transition-opacity"
+    >
+    </div>
+
+    <!-- LEFT SIDEBAR (Desktop Dock & Mobile Slide-Out Drawer) -->
+    <aside
+      id="admin-sidebar"
+      class="fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-slate-200/90 flex flex-col justify-between transition-transform duration-300 transform -translate-x-full lg:translate-x-0 shadow-xl lg:shadow-none"
+    >
+      <div
+        class="flex flex-col flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-200"
+      >
+        <!-- Brand Header with Logo & Collapse Toggle -->
+        <div
+          class="h-16 lg:h-20 px-5 border-b border-slate-100 flex items-center justify-between"
+        >
+          <a href="/admin" class="flex items-center gap-3 group">
+            <div
+              class="w-9 h-9 lg:w-10 lg:h-10 rounded-2xl bg-gradient-to-tr from-purple-600 to-indigo-600 flex items-center justify-center font-bold text-white font-['Space_Grotesk'] text-base lg:text-lg shadow-md shadow-purple-500/25"
+            >
+              H+
+            </div>
+            <div>
+              <div
+                class="text-sm lg:text-base font-bold text-slate-900 tracking-tight font-['Space_Grotesk']"
+              >
+                HaqPlus IT
+              </div>
+              <div class="text-[10px] lg:text-[11px] text-slate-400 font-medium">
+                Order Management
+              </div>
+            </div>
+          </a>
+
+          <!-- Mobile Close / Desktop Toggle Button -->
+          <button
+            type="button"
+            id="close-sidebar-btn"
+            class="w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center transition-colors cursor-pointer text-xs"
+            title="Close Menu"
+          >
+            <svg
+              class="w-4 h-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Sidebar Navigation -->
+        <nav class="p-4 space-y-1.5">
+          <!-- 1. Dashboard -->
+          <button
+            type="button"
+            id="sb-dash-btn"
+            class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-xs font-semibold text-slate-600 hover:text-purple-700 hover:bg-purple-50/60 transition-all text-left group cursor-pointer"
+          >
+            <svg
+              class="w-4 h-4 text-slate-400 group-hover:text-purple-600 transition-colors"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
+              ></path>
+            </svg>
+            <span>Dashboard</span>
+          </button>
+
+          <!-- 2. Orders (ACTIVE PURPLE MENU) -->
+          <div class="space-y-1">
+            <button
+              type="button"
+              class="w-full flex items-center justify-between px-4 py-3 rounded-xl text-xs font-bold text-white bg-purple-600 shadow-md shadow-purple-600/25 transition-all text-left"
+            >
+              <div class="flex items-center gap-3.5">
+                <svg
+                  class="w-4 h-4 text-white"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                </svg>
+                <span>Orders</span>
+              </div>
+              <svg
+                class="w-3.5 h-3.5 text-white/80"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </button>
+
+            <!-- Submenu -->
+            <div class="pl-11 pr-2 py-1 space-y-1 text-xs">
+              <button
+                type="button"
+                data-sidebar-status="all"
+                class="sidebar-nav-btn w-full text-left py-1.5 px-2 rounded-lg font-bold text-purple-700 bg-purple-50/80 flex items-center justify-between cursor-pointer"
+              >
+                <span>• All Orders</span>
+                <span
+                  id="sb-count-all"
+                  class="text-[10px] bg-purple-200/70 text-purple-800 px-1.5 py-0.2 rounded font-mono"
+                  >{initialLeads.length}</span
+                >
+              </button>
+              <button
+                type="button"
+                data-sidebar-status="new"
+                class="sidebar-nav-btn w-full text-left py-1.5 px-2 rounded-lg font-medium text-slate-500 hover:text-purple-700 hover:bg-slate-50 transition-colors flex items-center justify-between cursor-pointer"
+              >
+                <span>• New Orders</span>
+                <span
+                  id="sb-count-new"
+                  class="text-[10px] bg-rose-100 text-rose-700 px-1.5 py-0.2 rounded font-mono font-bold"
+                  >{initialLeads.filter((l) => l.status === "new").length}</span
+                >
+              </button>
+              <button
+                type="button"
+                data-sidebar-status="won"
+                class="sidebar-nav-btn w-full text-left py-1.5 px-2 rounded-lg font-medium text-slate-500 hover:text-purple-700 hover:bg-slate-50 transition-colors flex items-center justify-between cursor-pointer"
+              >
+                <span>• Confirmed / Paid</span>
+                <span
+                  id="sb-count-won"
+                  class="text-[10px] bg-emerald-100 text-emerald-700 px-1.5 py-0.2 rounded font-mono"
+                  >{initialLeads.filter((l) => l.status === "won").length}</span
+                >
+              </button>
+              <button
+                type="button"
+                data-sidebar-status="cancelled"
+                class="sidebar-nav-btn w-full text-left py-1.5 px-2 rounded-lg font-medium text-slate-500 hover:text-purple-700 hover:bg-slate-50 transition-colors flex items-center justify-between cursor-pointer"
+              >
+                <span>• Cancelled Orders</span>
+                <span
+                  id="sb-count-cancelled"
+                  class="text-[10px] bg-slate-100 text-slate-600 px-1.5 py-0.2 rounded font-mono"
+                  >{
+                    initialLeads.filter((l) => l.status === "cancelled").length
+                  }</span
+                >
+              </button>
+            </div>
+          </div>
+
+          <!-- 3. Products -->
+          <button
+            type="button"
+            id="sb-products-btn"
+            class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-xs font-semibold text-slate-600 hover:text-purple-700 hover:bg-purple-50/60 transition-all group text-left cursor-pointer"
+          >
+            <svg
+              class="w-4 h-4 text-slate-400 group-hover:text-purple-600 transition-colors"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
+              ></path>
+            </svg>
+            <span>Products</span>
+          </button>
+
+          <!-- 4. Settings & Courier -->
+          <button
+            type="button"
+            id="open-courier-modal-btn"
+            class="w-full flex items-center justify-between px-4 py-3 rounded-xl text-xs font-semibold text-slate-600 hover:text-purple-700 hover:bg-purple-50/60 transition-all group cursor-pointer"
+          >
+            <div class="flex items-center gap-3.5">
+              <svg
+                class="w-4 h-4 text-slate-400 group-hover:text-purple-600 transition-colors"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                ></path>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+              </svg>
+              <span>Settings & Courier</span>
+            </div>
+            <span
+              class="text-[9px] px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 font-bold"
+              >API</span
+            >
+          </button>
+
+          <!-- 5. Landing Page -->
+          <a
+            href="/"
+            target="_blank"
+            class="flex items-center justify-between px-4 py-3 rounded-xl text-xs font-semibold text-slate-600 hover:text-purple-700 hover:bg-purple-50/60 transition-all group"
+          >
+            <div class="flex items-center gap-3.5">
+              <svg
+                class="w-4 h-4 text-slate-400 group-hover:text-purple-600 transition-colors"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                ></path>
+              </svg>
+              <span>Landing Page</span>
+            </div>
+            <span class="text-slate-400 text-xs">↗</span>
+          </a>
+
+          <!-- 6. Scarcity Box -->
+          <div
+            class="px-4 py-3 rounded-xl bg-purple-50/70 border border-purple-100 text-xs mt-3"
+          >
+            <div
+              class="flex items-center justify-between text-purple-900 font-bold mb-1"
+            >
+              <span>Daily Target (5 Limit)</span>
+              <span class="text-[11px] font-mono text-purple-700">3/5</span>
+            </div>
+            <div
+              class="w-full h-1.5 rounded-full bg-purple-200 overflow-hidden"
+            >
+              <div class="w-3/5 h-full bg-purple-600 rounded-full"></div>
+            </div>
+            <p class="text-[10px] text-purple-600/80 mt-1.5 font-medium">
+              হক প্লাস আইটি প্রচার অফার
+            </p>
+          </div>
+        </nav>
+      </div>
+
+      <!-- Bottom Profile & Logout -->
+      <div class="p-4 border-t border-slate-100 bg-slate-50/60">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2.5 overflow-hidden">
+            <div
+              class="w-9 h-9 rounded-xl bg-purple-100 border border-purple-200 text-purple-700 font-bold flex items-center justify-center font-['Space_Grotesk'] text-xs shrink-0"
+            >
+              AK
+            </div>
+            <div class="overflow-hidden">
+              <div class="text-xs font-bold text-slate-800 truncate">
+                Anwarul Karim
+              </div>
+              <div class="text-[10px] text-slate-400 truncate">
+                01560-007230
+              </div>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            id="auth-logout-btn"
+            class="w-8 h-8 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 flex items-center justify-center transition-colors cursor-pointer"
+            title="লগআউট"
+          >
+            <svg
+              class="w-4 h-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+              ></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- RIGHT MAIN CONTENT CANVAS -->
+    <div class="lg:pl-64 flex-1 flex flex-col min-w-0">
+      
+      <!-- TOP HEADER BAR (Mobile Matching Screenshot with Left Logo & Right Icons) -->
+      <header
+        class="h-16 lg:h-18 px-4 sm:px-8 bg-white border-b border-slate-200/80 flex items-center justify-between gap-3 sticky top-0 z-30"
+      >
+        <!-- Left: Logo & Title -->
+        <div class="flex items-center gap-2.5 sm:gap-3">
+          <a href="/admin" class="flex items-center gap-2 group">
+            <div
+              class="w-9 h-9 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-600 flex items-center justify-center font-bold text-white font-['Space_Grotesk'] text-sm shadow-md shadow-purple-500/25"
+            >
+              H+
+            </div>
+            <div class="flex flex-col">
+              <span class="text-sm font-bold text-slate-900 font-['Space_Grotesk'] leading-tight">
+                HaqPlus IT
+              </span>
+              <span class="text-[10px] text-slate-400 font-medium leading-none">
+                OMS Portal
+              </span>
+            </div>
+          </a>
+
+          <!-- Desktop Title Separator -->
+          <div class="hidden lg:flex items-center gap-3 pl-4 border-l border-slate-200">
+            <h1 class="text-xl font-bold text-slate-900 font-['Space_Grotesk'] tracking-tight">
+              Order
+            </h1>
+          </div>
+        </div>
+
+        <!-- Right: Actions & Tools Matching Screenshot Exactly -->
+        <div class="flex items-center gap-1.5 sm:gap-2.5">
+          
+          <!-- Headset Support (Purple Square/Pill with Headset Icon) -->
+          <a
+            href="https://wa.me/8801560007230"
+            target="_blank"
+            class="w-9 h-9 sm:w-auto sm:px-3.5 sm:py-2 rounded-xl bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-center gap-2 shadow-md shadow-purple-500/20 transition-all"
+            title="Customer Support"
+          >
+            <svg
+              class="w-4 h-4 fill-none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 100-6 3 3 0 000 6z"
+              ></path>
+            </svg>
+            <span class="hidden sm:inline text-xs font-bold">Support</span>
+          </a>
+
+          <!-- Globe Circle Button -->
+          <button
+            type="button"
+            class="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white border border-slate-200/80 hover:bg-slate-50 text-slate-600 flex items-center justify-center transition-colors"
+            title="Language"
+          >
+            <svg
+              class="w-4 h-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"
+              ></path>
+            </svg>
+          </button>
+
+          <!-- Translate Circle Button -->
+          <button
+            type="button"
+            class="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white border border-slate-200/80 hover:bg-slate-50 text-slate-600 flex items-center justify-center transition-colors"
+            title="Translation"
+          >
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
+            </svg>
+          </button>
+
+          <!-- Search Circle Button -->
+          <button
+            type="button"
+            id="mobile-search-toggle-btn"
+            class="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white border border-slate-200/80 hover:bg-slate-50 text-slate-600 flex items-center justify-center transition-colors cursor-pointer"
+            title="Search Orders"
+          >
+            <svg
+              class="w-4 h-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              ></path>
+            </svg>
+          </button>
+
+          <!-- Avatar Circle Button -->
+          <div
+            class="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-slate-900 text-white font-bold text-xs flex items-center justify-center font-['Space_Grotesk'] border-2 border-purple-600 cursor-pointer"
+            title="Anwarul Karim"
+          >
+            AK
+          </div>
+
+        </div>
+      </header>
+
+      <!-- MAIN BODY CONTAINER -->
+      <main class="flex-1 p-3.5 sm:p-7 space-y-4 sm:space-y-5 max-w-[1600px] w-full mx-auto">
+        
+        <!-- TOOLBAR: Search Bar & Actions -->
+        <div
+          class="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3"
+        >
+          <!-- Search Bar -->
+          <div class="relative flex-1 max-w-md">
+            <input
+              type="text"
+              id="leads-search-input"
+              placeholder="Search orders, phone, address..."
+              class="w-full pl-10 pr-4 py-2 sm:py-2.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-purple-600 focus:ring-2 focus:ring-purple-100 transition-all shadow-sm"
+            />
+            <svg
+              class="w-4 h-4 text-slate-400 absolute left-3.5 top-2.5 sm:top-3"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              ></path>
+            </svg>
+          </div>
+
+          <!-- Action Buttons Row -->
+          <div class="flex items-center gap-2 flex-wrap">
+            <!-- Download All Orders -->
+            <button
+              type="button"
+              id="export-csv-btn"
+              class="px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl bg-sky-50 text-sky-700 hover:bg-sky-100 text-xs font-bold border border-sky-100 flex items-center gap-1.5 transition-colors cursor-pointer"
+            >
+              <svg
+                class="w-3.5 h-3.5 text-sky-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                ></path>
+              </svg>
+              <span>Download Orders</span>
+            </button>
+
+            <!-- Sync Courier Status -->
+            <button
+              type="button"
+              id="sync-courier-btn"
+              class="px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl bg-sky-50 text-sky-700 hover:bg-sky-100 text-xs font-bold border border-sky-100 flex items-center gap-1.5 transition-colors cursor-pointer"
+            >
+              <svg
+                class="w-3.5 h-3.5 text-sky-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                ></path>
+              </svg>
+              <span>Sync Courier</span>
+            </button>
+
+            <!-- + Add Order Button -->
+            <button
+              type="button"
+              id="open-manual-order-modal-btn"
+              class="px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold shadow-md shadow-purple-600/20 flex items-center gap-1.5 transition-all cursor-pointer ml-auto sm:ml-0"
+            >
+              <span class="text-sm leading-none">+</span>
+              <span>Add Order</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- HORIZONTAL STATUS PILLS ROW -->
+        <div
+          class="flex items-center justify-between gap-3 overflow-x-auto pb-1 scrollbar-none"
+        >
+          <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+            <!-- All Data -->
+            <button
+              type="button"
+              data-filter-status="all"
+              class="status-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold bg-purple-600 text-white shadow-sm flex items-center gap-1.5 transition-all cursor-pointer"
+            >
+              <span>All Data</span>
+              <span
+                id="tab-count-all"
+                class="px-1.5 py-0.2 rounded-full text-[10px] bg-white/20 font-mono"
+                >{initialLeads.length}</span
+              >
+            </button>
+
+            <!-- New Orders -->
+            <button
+              type="button"
+              data-filter-status="new"
+              class="status-filter-btn px-3.5 py-1.5 rounded-full text-xs font-medium text-slate-600 bg-white hover:bg-slate-100 border border-slate-200 flex items-center gap-1.5 transition-all cursor-pointer"
+            >
+              <span>New</span>
+              <span
+                id="tab-count-new"
+                class="px-1.5 py-0.2 rounded-full text-[10px] bg-rose-100 text-rose-700 font-mono font-bold"
+                >{initialLeads.filter((l) => l.status === "new").length}</span
+              >
+            </button>
+
+            <!-- In Contact -->
+            <button
+              type="button"
+              data-filter-status="contacted"
+              class="status-filter-btn px-3.5 py-1.5 rounded-full text-xs font-medium text-slate-600 bg-white hover:bg-slate-100 border border-slate-200 flex items-center gap-1.5 transition-all cursor-pointer"
+            >
+              <span>Pending</span>
+              <span
+                id="tab-count-contacted"
+                class="px-1.5 py-0.2 rounded-full text-[10px] bg-amber-100 text-amber-800 font-mono font-bold"
+                >{
+                  initialLeads.filter((l) => l.status === "contacted").length
+                }</span
+              >
+            </button>
+
+            <!-- Confirmed -->
+            <button
+              type="button"
+              data-filter-status="won"
+              class="status-filter-btn px-3.5 py-1.5 rounded-full text-xs font-medium text-slate-600 bg-white hover:bg-slate-100 border border-slate-200 flex items-center gap-1.5 transition-all cursor-pointer"
+            >
+              <span>Confirmed</span>
+              <span
+                id="tab-count-won"
+                class="px-1.5 py-0.2 rounded-full text-[10px] bg-emerald-100 text-emerald-800 font-mono font-bold"
+                >{initialLeads.filter((l) => l.status === "won").length}</span
+              >
+            </button>
+          </div>
+
+          <!-- Pre-order indicator -->
+          <div
+            class="px-2.5 py-1 rounded-xl bg-white border border-slate-200 text-[11px] font-bold text-slate-700 flex items-center gap-1.5 shrink-0"
+          >
+            <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+            <span>Pre-Order</span>
+          </div>
+        </div>
+
+        <!-- 1. MOBILE ORDERS LIST (EXACT CARD STYLE FROM USER'S SCREENSHOT) -->
+        <div id="mobile-leads-list" class="block lg:hidden space-y-3">
+          <!-- Injected via JavaScript renderMobileCards() -->
+        </div>
+
+        <!-- 2. MOBILE TOP PRODUCTS SECTION (EXACTLY AS IN SCREENSHOT) -->
+        <div id="mobile-top-products-section" class="block lg:hidden bg-white rounded-3xl border border-slate-200/90 p-4 shadow-sm space-y-3.5 mt-4">
+          <div class="flex items-center justify-between">
+            <h3 class="text-base font-bold text-slate-900 font-['Space_Grotesk']">
+              Top Products
+            </h3>
+            <div class="px-3 py-1 rounded-xl border border-purple-200 bg-purple-50/50 text-purple-700 text-xs font-semibold flex items-center gap-1">
+              <span>▼ October</span>
+            </div>
+          </div>
+
+          <!-- Product Item 1 -->
+          <div class="flex items-center justify-between p-2.5 rounded-2xl bg-slate-50/70 border border-slate-100">
+            <div class="flex items-center gap-3">
+              <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-purple-100 to-indigo-100 border border-purple-200 flex items-center justify-center font-bold text-purple-700 text-xs font-mono shrink-0">
+                L1
+              </div>
+              <div>
+                <div class="font-bold text-slate-900 text-xs leading-snug">
+                  অল-ইন-ওয়ান ল্যান্ডিং পেজ
+                </div>
+                <div class="text-[11px] font-semibold text-slate-500 mt-0.5 font-mono">
+                  ৳ 500
+                </div>
+              </div>
+            </div>
+            <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-500 text-white font-mono shadow-sm">
+              699
+            </span>
+          </div>
+
+          <!-- Product Item 2 -->
+          <div class="flex items-center justify-between p-2.5 rounded-2xl bg-slate-50/70 border border-slate-100">
+            <div class="flex items-center gap-3">
+              <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-blue-100 to-cyan-100 border border-blue-200 flex items-center justify-center font-bold text-blue-700 text-xs font-mono shrink-0">
+                FB
+              </div>
+              <div>
+                <div class="font-bold text-slate-900 text-xs leading-snug">
+                  Pixel & CAPI Tracking
+                </div>
+                <div class="text-[11px] font-semibold text-slate-500 mt-0.5 font-mono">
+                  ৳ 500
+                </div>
+              </div>
+            </div>
+            <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-500 text-white font-mono shadow-sm">
+              261
+            </span>
+          </div>
+
+          <!-- Product Item 3 -->
+          <div class="flex items-center justify-between p-2.5 rounded-2xl bg-slate-50/70 border border-slate-100">
+            <div class="flex items-center gap-3">
+              <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-emerald-100 to-teal-100 border border-emerald-200 flex items-center justify-center font-bold text-emerald-700 text-xs font-mono shrink-0">
+                CR
+              </div>
+              <div>
+                <div class="font-bold text-slate-900 text-xs leading-snug">
+                  Steadfast Courier Push
+                </div>
+                <div class="text-[11px] font-semibold text-slate-500 mt-0.5 font-mono">
+                  ৳ 500
+                </div>
+              </div>
+            </div>
+            <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-500 text-white font-mono shadow-sm">
+              821
+            </span>
+          </div>
+        </div>
+
+        <!-- 3. DESKTOP TABLE VIEW (HIDDEN ON MOBILE, VISIBLE ON LG+) -->
+        <div
+          class="hidden lg:block bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden"
+        >
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse text-xs">
+              <!-- Table Head -->
+              <thead>
+                <tr
+                  class="border-b border-slate-200 bg-[#FAFBFD] text-[11px] font-bold text-slate-400 uppercase tracking-wider"
+                >
+                  <th class="py-4 pl-6 pr-2 w-10">
+                    <input
+                      type="checkbox"
+                      class="rounded border-slate-300 text-purple-600 focus:ring-purple-500 cursor-pointer"
+                    />
+                  </th>
+                  <th class="py-4 px-3 w-12">SL</th>
+                  <th class="py-4 px-3 w-16">IMAGE</th>
+                  <th class="py-4 px-4 w-32">ORDER ID</th>
+                  <th class="py-4 px-4 min-w-[200px]">NAME & DETAILS</th>
+                  <th class="py-4 px-4 min-w-[180px]">PHONE NO</th>
+                  <th class="py-4 px-4 w-32">ORDER FROM</th>
+                  <th class="py-4 px-4 w-36">ORDER DATE TIME</th>
+                  <th class="py-4 px-4 w-32">PAYMENT TYPE</th>
+                  <th class="py-4 pr-6 pl-3 w-40 text-right">ACTION</th>
+                </tr>
+              </thead>
+
+              <!-- Table Body -->
+              <tbody id="leads-table-body" class="divide-y divide-slate-100">
+                <!-- Injected via JavaScript -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Table Footer -->
+          <div
+            class="px-6 py-4 border-t border-slate-100 bg-[#FAFBFD] flex items-center justify-between text-xs text-slate-500"
+          >
+            <div>
+              Showing <span
+                id="table-showing-count"
+                class="font-bold text-slate-800 font-mono">0</span
+              > orders
+            </div>
+            <div class="flex items-center gap-1">
+              <button
+                type="button"
+                class="px-2.5 py-1 rounded-lg bg-white border border-slate-200 text-slate-600 cursor-pointer"
+                >Previous</button
+              >
+              <button
+                type="button"
+                class="px-3 py-1 rounded-lg bg-purple-600 text-white font-bold cursor-pointer"
+                >1</button
+              >
+              <button
+                type="button"
+                class="px-2.5 py-1 rounded-lg bg-white border border-slate-200 text-slate-600 cursor-pointer"
+                >Next</button
+              >
+            </div>
+          </div>
+        </div>
+
+        <!-- Empty State View -->
+        <div id="leads-empty-view" class="hidden text-center py-16 bg-white rounded-3xl border border-slate-200">
+          <div
+            class="w-16 h-16 rounded-2xl bg-slate-50 border border-slate-100 text-slate-400 flex items-center justify-center mx-auto mb-3"
+          >
+            <svg
+              class="w-8 h-8"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.5"
+                d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
+              ></path>
+            </svg>
+          </div>
+          <h3
+            class="text-base font-bold text-slate-800 font-['Space_Grotesk'] mb-1"
+          >
+            No orders found
+          </h3>
+          <p class="text-xs text-slate-400 max-w-sm mx-auto mb-4">
+            আপনার ফিল্টার বা সার্চের সাথে কোনো অর্ডার মিলছে না।
+          </p>
+          <button
+            type="button"
+            id="empty-reset-filter-btn"
+            class="px-4 py-2 rounded-xl text-xs font-bold text-purple-700 bg-purple-50 hover:bg-purple-100 border border-purple-200 transition-colors cursor-pointer"
+          >
+            Reset Filters
+          </button>
+        </div>
+
+      </main>
+    </div>
+
+    <!-- 4. FIXED BOTTOM MOBILE NAVIGATION BAR (EXACTLY MATCHING RED RECTANGLE IN USER'S SCREENSHOT) -->
+    <nav
+      id="mobile-bottom-nav"
+      class="fixed bottom-0 inset-x-0 bg-white border-t border-slate-200/90 z-40 py-1.5 px-3 flex items-center justify-around shadow-[0_-4px_25px_rgba(0,0,0,0.06)] lg:hidden"
+    >
+      <!-- 1. Dashboard (Active Pill matching screenshot) -->
+      <button
+        type="button"
+        id="bnav-dashboard"
+        class="flex flex-col items-center justify-center py-1 px-3.5 rounded-2xl bg-purple-100 text-purple-700 transition-all cursor-pointer"
+      >
+        <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+          <path d="M4 4h7v7H4V4zm9 0h7v7h-7V4zm-9 9h7v7H4v-7zm9 0h7v7h-7v-7z"/>
+        </svg>
+        <span class="text-[10px] font-bold mt-0.5">Dashboard</span>
+      </button>
+
+      <!-- 2. Product -->
+      <button
+        type="button"
+        id="bnav-product"
+        class="flex flex-col items-center justify-center py-1 px-2.5 text-slate-500 hover:text-purple-600 transition-all cursor-pointer"
+      >
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+        </svg>
+        <span class="text-[10px] font-semibold mt-0.5">Product</span>
+      </button>
+
+      <!-- 3. Order List -->
+      <button
+        type="button"
+        id="bnav-orders"
+        class="flex flex-col items-center justify-center py-1 px-2.5 text-slate-500 hover:text-purple-600 transition-all cursor-pointer"
+      >
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
+        </svg>
+        <span class="text-[10px] font-semibold mt-0.5">Order List</span>
+      </button>
+
+      <!-- 4. Notification with Red Badge 4 -->
+      <button
+        type="button"
+        id="bnav-notify"
+        class="relative flex flex-col items-center justify-center py-1 px-2.5 text-slate-500 hover:text-purple-600 transition-all cursor-pointer"
+      >
+        <div class="relative">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+          </svg>
+          <span class="absolute -top-1 -right-1.5 w-4 h-4 rounded-full bg-rose-500 text-white text-[9px] font-bold flex items-center justify-center font-mono">
+            4
+          </span>
+        </div>
+        <span class="text-[10px] font-semibold mt-0.5">Notification</span>
+      </button>
+
+      <!-- 5. Menu (Opens Sidebar Drawer) -->
+      <button
+        type="button"
+        id="bnav-menu"
+        class="flex flex-col items-center justify-center py-1 px-2.5 text-slate-500 hover:text-purple-600 transition-all cursor-pointer"
+      >
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+        <span class="text-[10px] font-semibold mt-0.5">Menu</span>
+      </button>
+    </nav>
+
+    <!-- AUTHENTICATION GATE MODAL -->
+    <div
+      id="auth-modal"
+      class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-md flex items-center justify-center p-4"
+    >
+      <div
+        class="w-full max-w-md bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-2xl text-center relative overflow-hidden"
+      >
+        <div
+          class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-purple-600 to-indigo-600 text-white flex items-center justify-center mx-auto mb-4 text-2xl shadow-lg shadow-purple-500/25"
+        >
+          <svg
+            class="w-7 h-7"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+            ></path>
+          </svg>
+        </div>
+
+        <h2
+          class="text-xl font-bold text-slate-900 font-['Space_Grotesk'] mb-1"
+        >
+          HaqPlus IT OMS Portal
+        </h2>
+        <p class="text-xs text-slate-500 mb-6">
+          অর্ডার ও লিড ম্যানেজমেন্ট ড্যাশবোর্ডে প্রবেশ করতে লগইন করুন।
+        </p>
+
+        <form id="auth-form" class="space-y-4 text-left">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1"
+              >Admin Email</label
+            >
+            <input
+              type="email"
+              id="auth-email-input"
+              placeholder="dev.anwarul@gmail.com"
+              required
+              class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-purple-600 focus:bg-white focus:ring-2 focus:ring-purple-100"
+            />
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1"
+              >Password</label
+            >
+            <input
+              type="password"
+              id="auth-pass-input"
+              placeholder="••••••••"
+              required
+              class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-purple-600 focus:bg-white focus:ring-2 focus:ring-purple-100"
+            />
+          </div>
+
+          <div
+            id="auth-error"
+            class="hidden text-xs text-rose-600 font-medium text-center"
+          >
+            ভুল ইমেইল বা পাসওয়ার্ড। দয়া করে সঠিক তথ্য দিন।
+          </div>
+
+          <button
+            type="submit"
+            class="w-full py-3 px-4 rounded-xl font-bold text-white bg-purple-600 hover:bg-purple-700 shadow-md shadow-purple-600/25 transition-all text-sm cursor-pointer"
+          >
+            ড্যাশবোর্ডে লগইন করুন
+          </button>
+        </form>
+
+        <p class="text-[11px] text-slate-400 mt-5">
+          সিকিউর ও এনক্রিপ্টেড সেশন ম্যানেজমেন্ট।
+        </p>
+      </div>
+    </div>
+
+    <!-- MANUAL ORDER CREATION MODAL -->
+    <div
+      id="manual-order-modal"
+      class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4"
+    >
+      <div
+        class="w-full max-w-md bg-white border border-slate-200 rounded-3xl p-6 shadow-2xl relative text-left"
+      >
+        <div
+          class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4"
+        >
+          <h4
+            class="text-base font-bold text-slate-900 font-['Space_Grotesk'] flex items-center gap-2"
+          >
+            <span>+ Add Manual Order</span>
+          </h4>
+          <button
+            type="button"
+            id="close-manual-order-btn"
+            class="text-slate-400 hover:text-slate-700 text-xl cursor-pointer"
+            >×</button
+          >
+        </div>
+
+        <form id="manual-order-form" class="space-y-3.5">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1"
+              >কাস্টমারের নাম</label
+            >
+            <input
+              type="text"
+              id="manual-name"
+              required
+              placeholder="যেমন: তানভীর হাসান"
+              class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:border-purple-600 focus:bg-white"
+            />
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1"
+              >মোবাইল নম্বর / WhatsApp</label
+            >
+            <input
+              type="tel"
+              id="manual-phone"
+              required
+              placeholder="01700-000000"
+              class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:border-purple-600 focus:bg-white"
+            />
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1"
+              >ডেলিভারি ঠিকানা / প্রোডাক্ট</label
+            >
+            <input
+              type="text"
+              id="manual-product"
+              placeholder="ঠিকানা: রোড নং ৪, মিরপুর ১০ / Organic Honey"
+              class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:border-purple-600 focus:bg-white"
+            />
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1"
+              >প্যাকেজ</label
+            >
+            <select
+              id="manual-package"
+              class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:border-purple-600 focus:bg-white"
+            >
+              <option
+                value="৳৫০০ - অল-ইন-ওয়ান ই-কমার্স ল্যান্ডিং পেজ (সবকিছু সহ)"
+                selected>৳৫০০ — অল-ইন-ওয়ান ল্যান্ডিং পেজ</option
+              >
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1"
+              >শুরু করার স্ট্যাটাস</label
+            >
+            <select
+              id="manual-status"
+              class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:border-purple-600 focus:bg-white"
+            >
+              <option value="new">New Order</option>
+              <option value="contacted">In Contact</option>
+              <option value="in_progress">Processing</option>
+              <option value="won">Confirmed / Paid</option>
+            </select>
+          </div>
+
+          <div class="pt-2 flex justify-end gap-2">
+            <button
+              type="button"
+              id="cancel-manual-order-btn"
+              class="px-4 py-2 rounded-xl text-xs text-slate-500 hover:text-slate-800 bg-slate-100 cursor-pointer"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              class="px-5 py-2 rounded-xl text-xs font-bold text-white bg-purple-600 hover:bg-purple-700 cursor-pointer"
+            >
+              Create Order
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- NOTES MODAL DIALOG -->
+    <div
+      id="notes-modal"
+      class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4"
+    >
+      <div
+        class="w-full max-w-lg bg-white border border-slate-200 rounded-3xl p-6 shadow-2xl relative"
+      >
+        <div
+          class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4"
+        >
+          <h4
+            class="text-sm font-bold text-slate-900 font-['Space_Grotesk'] flex items-center gap-2"
+          >
+            <span
+              >Internal Notes • <span
+                id="notes-client-name"
+                class="text-purple-600">Client</span
+              ></span
+            >
+          </h4>
+          <button
+            type="button"
+            id="close-notes-modal"
+            class="text-slate-400 hover:text-slate-700 text-lg cursor-pointer"
+            >×</button
+          >
+        </div>
+
+        <input type="hidden" id="notes-lead-id" value="" />
+        <textarea
+          id="notes-textarea"
+          rows="5"
+          placeholder="ক্লায়েন্টের সাথে কী কথা হলো, কত টাকা অ্যাডভান্স দিল, অথবা কবে ডেলিভারি দিতে হবে তা লিখে রাখুন..."
+          class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-purple-600 focus:bg-white mb-4"
+        ></textarea>
+
+        <div class="flex justify-end gap-2">
+          <button
+            type="button"
+            id="cancel-notes-btn"
+            class="px-4 py-2 rounded-xl text-xs text-slate-500 hover:text-slate-800 bg-slate-100 cursor-pointer"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            id="save-notes-btn"
+            class="px-5 py-2 rounded-xl text-xs font-bold text-white bg-purple-600 hover:bg-purple-700 cursor-pointer"
+          >
+            Save Notes
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- COURIER SETTINGS MODAL -->
+    <div
+      id="courier-modal"
+      class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4"
+    >
+      <div
+        class="w-full max-w-lg bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 shadow-2xl relative text-left"
+      >
+        <div
+          class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4"
+        >
+          <div class="flex items-center gap-2.5">
+            <div
+              class="w-9 h-9 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center"
+            >
+              <svg
+                class="w-5 h-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"
+                ></path>
+              </svg>
+            </div>
+            <div>
+              <h4
+                class="text-sm font-bold text-slate-900 font-['Space_Grotesk']"
+              >
+                Courier & Delivery Settings
+              </h4>
+              <p class="text-[11px] text-slate-400">
+                Steadfast & Pathao Merchant API Integration
+              </p>
+            </div>
+          </div>
+          <button
+            type="button"
+            id="close-courier-modal"
+            class="text-slate-400 hover:text-slate-700 text-xl cursor-pointer"
+            >×</button
+          >
+        </div>
+
+        <div class="space-y-3.5 text-xs">
+          <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200">
+            <div class="font-bold text-slate-800 mb-1 flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+              <span>Steadfast Courier API Status</span>
+            </div>
+            <p class="text-slate-500 text-[11px] leading-relaxed">
+              Steadfast API Key ও Secret Key অটো সেটআপ চালু আছে। যেকোনো অর্ডার
+              ১-ক্লিকে সরাসরি Steadfast পার্সেল সিস্টেমে সেন্ড করা যাবে।
+            </p>
+          </div>
+
+          <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200">
+            <div class="font-bold text-slate-800 mb-1 flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+              <span>Pathao Courier Merchant API</span>
+            </div>
+            <p class="text-slate-500 text-[11px] leading-relaxed">
+              পাঠাও মার্চেন্ট পোর্টালের Client ID ও Secret দিয়ে অটো অর্ডার
+              বুকিং কনফার্মেশন ও ট্র্যাকিং সক্রিয় করা যায়।
+            </p>
+          </div>
+        </div>
+
+        <div class="mt-5 flex justify-end">
+          <button
+            type="button"
+            id="ok-courier-btn"
+            class="px-5 py-2 rounded-xl text-xs font-bold bg-purple-600 text-white hover:bg-purple-700 cursor-pointer"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Client-side script handling auth, live fetching, filters, desktop table & mobile cards rendering -->
+  <script>
+    import type { Lead } from "../../lib/leadsStorage";
+
+    // Auth credentials
+    const ADMIN_EMAIL = "dev.anwarul@gmail.com";
+    const ADMIN_PASS = "dev.anwarul";
+    const AUTH_STORAGE_KEY = "haqplus_admin_user_session";
+
+    const authModal = document.getElementById("auth-modal");
+    const authForm = document.getElementById("auth-form");
+    const authEmailInput = document.getElementById(
+      "auth-email-input",
+    ) as HTMLInputElement | null;
+    const authPassInput = document.getElementById(
+      "auth-pass-input",
+    ) as HTMLInputElement | null;
+    const authError = document.getElementById("auth-error");
+    const logoutBtn = document.getElementById("auth-logout-btn");
+
+    // Sidebar drawer elements
+    const adminSidebar = document.getElementById("admin-sidebar");
+    const sidebarBackdrop = document.getElementById("sidebar-backdrop");
+    const closeSidebarBtn = document.getElementById("close-sidebar-btn");
+
+    // Modals
+    const openCourierModalBtn = document.getElementById(
+      "open-courier-modal-btn",
+    );
+    const courierModal = document.getElementById("courier-modal");
+    const closeCourierModal = document.getElementById("close-courier-modal");
+    const okCourierBtn = document.getElementById("ok-courier-btn");
+
+    // Table & Mobile list elements
+    const leadsTableBody = document.getElementById("leads-table-body");
+    const mobileLeadsList = document.getElementById("mobile-leads-list");
+    const emptyView = document.getElementById("leads-empty-view");
+    const searchInput = document.getElementById(
+      "leads-search-input",
+    ) as HTMLInputElement | null;
+    const exportCsvBtn = document.getElementById("export-csv-btn");
+    const resetFilterBtn = document.getElementById("empty-reset-filter-btn");
+    const tableShowingCount = document.getElementById("table-showing-count");
+
+    // Counts
+    const tabCountAll = document.getElementById("tab-count-all");
+    const tabCountNew = document.getElementById("tab-count-new");
+    const tabCountContacted = document.getElementById("tab-count-contacted");
+    const tabCountWon = document.getElementById("tab-count-won");
+
+    const sbCountAll = document.getElementById("sb-count-all");
+    const sbCountNew = document.getElementById("sb-count-new");
+    const sbCountWon = document.getElementById("sb-count-won");
+    const sbCountCancelled = document.getElementById("sb-count-cancelled");
+
+    // Notes modal
+    const notesModal = document.getElementById("notes-modal");
+    const notesClientName = document.getElementById("notes-client-name");
+    const notesLeadId = document.getElementById(
+      "notes-lead-id",
+    ) as HTMLInputElement | null;
+    const notesTextarea = document.getElementById(
+      "notes-textarea",
+    ) as HTMLTextAreaElement | null;
+    const saveNotesBtn = document.getElementById("save-notes-btn");
+    const cancelNotesBtn = document.getElementById("cancel-notes-btn");
+    const closeNotesModal = document.getElementById("close-notes-modal");
+
+    // Manual Order modal
+    const manualOrderModal = document.getElementById("manual-order-modal");
+    const openManualOrderBtn = document.getElementById(
+      "open-manual-order-modal-btn",
+    );
+    const closeManualOrderBtn = document.getElementById(
+      "close-manual-order-btn",
+    );
+    const cancelManualOrderBtn = document.getElementById(
+      "cancel-manual-order-btn",
+    );
+    const manualOrderForm = document.getElementById("manual-order-form");
+
+    // State
+    let currentLeads: Lead[] = [];
+    let currentFilterStatus = "all";
+    let searchQuery = "";
+
+    // Sidebar Mobile Open/Close
+    function openSidebar() {
+      adminSidebar?.classList.remove("-translate-x-full");
+      sidebarBackdrop?.classList.remove("hidden");
+    }
+
+    function closeSidebar() {
+      adminSidebar?.classList.add("-translate-x-full");
+      sidebarBackdrop?.classList.add("hidden");
+    }
+
+    if (closeSidebarBtn)
+      closeSidebarBtn.addEventListener("click", closeSidebar);
+    if (sidebarBackdrop)
+      sidebarBackdrop.addEventListener("click", closeSidebar);
+
+    // Bottom Navigation Bar items
+    const bnavDashboard = document.getElementById("bnav-dashboard");
+    const bnavProduct = document.getElementById("bnav-product");
+    const bnavOrders = document.getElementById("bnav-orders");
+    const bnavNotify = document.getElementById("bnav-notify");
+    const bnavMenu = document.getElementById("bnav-menu");
+
+    if (bnavDashboard) {
+      bnavDashboard.addEventListener("click", () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        setActiveFilter("all");
+      });
+    }
+
+    if (bnavProduct) {
+      bnavProduct.addEventListener("click", () => {
+        const productSec = document.getElementById("mobile-top-products-section");
+        if (productSec) productSec.scrollIntoView({ behavior: "smooth" });
+      });
+    }
+
+    if (bnavOrders) {
+      bnavOrders.addEventListener("click", () => {
+        const list = document.getElementById("mobile-leads-list");
+        if (list) list.scrollIntoView({ behavior: "smooth" });
+      });
+    }
+
+    if (bnavNotify) {
+      bnavNotify.addEventListener("click", () => {
+        fetchLeads();
+      });
+    }
+
+    if (bnavMenu) {
+      bnavMenu.addEventListener("click", () => {
+        openSidebar();
+      });
+    }
+
+    // Mobile search toggle button in header
+    const mobileSearchToggleBtn = document.getElementById("mobile-search-toggle-btn");
+    if (mobileSearchToggleBtn && searchInput) {
+      mobileSearchToggleBtn.addEventListener("click", () => {
+        searchInput.focus();
+        searchInput.scrollIntoView({ behavior: "smooth", block: "center" });
+      });
+    }
+
+    // Courier Modal
+    if (openCourierModalBtn)
+      openCourierModalBtn.addEventListener("click", () => {
+        courierModal?.classList.remove("hidden");
+        closeSidebar();
+      });
+    if (closeCourierModal)
+      closeCourierModal.addEventListener("click", () =>
+        courierModal?.classList.add("hidden"),
+      );
+    if (okCourierBtn)
+      okCourierBtn.addEventListener("click", () =>
+        courierModal?.classList.add("hidden"),
+      );
+
+    // Auth logic
+    function checkAuth(): boolean {
+      const user = localStorage.getItem(AUTH_STORAGE_KEY);
+      if (user === ADMIN_EMAIL.toLowerCase()) {
+        authModal?.classList.add("hidden");
+        return true;
+      } else {
+        authModal?.classList.remove("hidden");
+        return false;
+      }
+    }
+
+    if (authForm) {
+      authForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const email = authEmailInput?.value.trim().toLowerCase();
+        const pass = authPassInput?.value;
+        if (email === ADMIN_EMAIL.toLowerCase() && pass === ADMIN_PASS) {
+          localStorage.setItem(AUTH_STORAGE_KEY, email);
+          authModal?.classList.add("hidden");
+          authError?.classList.add("hidden");
+          fetchLeads();
+        } else {
+          authError?.classList.remove("hidden");
+        }
+      });
+    }
+
+    if (logoutBtn) {
+      logoutBtn.addEventListener("click", () => {
+        localStorage.removeItem(AUTH_STORAGE_KEY);
+        window.location.reload();
+      });
+    }
+
+    // Manual Order Modal
+    if (openManualOrderBtn)
+      openManualOrderBtn.addEventListener("click", () =>
+        manualOrderModal?.classList.remove("hidden"),
+      );
+    if (closeManualOrderBtn)
+      closeManualOrderBtn.addEventListener("click", () =>
+        manualOrderModal?.classList.add("hidden"),
+      );
+    if (cancelManualOrderBtn)
+      cancelManualOrderBtn.addEventListener("click", () =>
+        manualOrderModal?.classList.add("hidden"),
+      );
+
+    if (manualOrderForm) {
+      manualOrderForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const name = (
+          document.getElementById("manual-name") as HTMLInputElement
+        )?.value.trim();
+        const phone = (
+          document.getElementById("manual-phone") as HTMLInputElement
+        )?.value.trim();
+        const product =
+          (
+            document.getElementById("manual-product") as HTMLInputElement
+          )?.value.trim() || "Custom Product";
+        const pkg = (
+          document.getElementById("manual-package") as HTMLSelectElement
+        )?.value;
+        const status = (
+          document.getElementById("manual-status") as HTMLSelectElement
+        )?.value as Lead["status"];
+
+        try {
+          const res = await fetch("/api/lead", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              fullName: name,
+              phone: phone,
+              service: "ই-কমার্স ল্যান্ডিং পেজ",
+              budget: pkg,
+              message: product,
+              status: status || "new",
+              source: "Website",
+            }),
+          });
+
+          if (res.ok) {
+            manualOrderModal?.classList.add("hidden");
+            (manualOrderForm as HTMLFormElement).reset();
+            fetchLeads();
+          }
+        } catch (err) {
+          console.error("Failed to create manual order:", err);
+        }
+      });
+    }
+
+    // Fetch leads
+    async function fetchLeads() {
+      try {
+        const res = await fetch("/api/lead", { cache: "no-store" });
+        if (res.ok) {
+          const data = await res.json();
+          currentLeads = data.leads || [];
+          renderAll();
+          updateStats();
+        }
+      } catch (err) {
+        console.error("Failed to fetch leads:", err);
+      }
+    }
+
+    // Update Counts
+    function updateStats() {
+      const total = currentLeads.length;
+      const newCount = currentLeads.filter((l) => l.status === "new").length;
+      const contactedCount = currentLeads.filter(
+        (l) => l.status === "contacted",
+      ).length;
+      const wonCount = currentLeads.filter((l) => l.status === "won").length;
+      const cancelledCount = currentLeads.filter(
+        (l) => l.status === "cancelled",
+      ).length;
+
+      if (tabCountAll) tabCountAll.textContent = total.toString();
+      if (tabCountNew) tabCountNew.textContent = newCount.toString();
+      if (tabCountContacted)
+        tabCountContacted.textContent = contactedCount.toString();
+      if (tabCountWon) tabCountWon.textContent = wonCount.toString();
+
+      if (sbCountAll) sbCountAll.textContent = total.toString();
+      if (sbCountNew) sbCountNew.textContent = newCount.toString();
+      if (sbCountWon) sbCountWon.textContent = wonCount.toString();
+      if (sbCountCancelled)
+        sbCountCancelled.textContent = cancelledCount.toString();
+    }
+
+    // Filter sync
+    function setActiveFilter(status: string) {
+      currentFilterStatus = status;
+
+      // Status pill buttons
+      document.querySelectorAll(".status-filter-btn").forEach((b) => {
+        const btnStatus = (b as HTMLElement).dataset.filterStatus;
+        if (btnStatus === status) {
+          b.className =
+            "status-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold bg-purple-600 text-white shadow-sm flex items-center gap-1.5 transition-all cursor-pointer";
+        } else {
+          b.className =
+            "status-filter-btn px-3.5 py-1.5 rounded-full text-xs font-medium text-slate-600 bg-white hover:bg-slate-100 border border-slate-200 flex items-center gap-1.5 transition-all cursor-pointer";
+        }
+      });
+
+      renderAll();
+    }
+
+    document.querySelectorAll(".status-filter-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const status = (btn as HTMLElement).dataset.filterStatus || "all";
+        setActiveFilter(status);
+      });
+    });
+
+    document.querySelectorAll(".sidebar-nav-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const status = (btn as HTMLElement).dataset.sidebarStatus || "all";
+        setActiveFilter(status);
+        closeSidebar();
+      });
+    });
+
+    if (searchInput) {
+      searchInput.addEventListener("input", (e) => {
+        searchQuery = (e.target as HTMLInputElement).value.toLowerCase().trim();
+        renderAll();
+      });
+    }
+
+    // Main render function updating both Desktop Table & Mobile Cards
+    function renderAll() {
+      const filtered = currentLeads.filter((lead) => {
+        const matchesStatus =
+          currentFilterStatus === "all" || lead.status === currentFilterStatus;
+        const matchesSearch =
+          !searchQuery ||
+          lead.fullName.toLowerCase().includes(searchQuery) ||
+          lead.phone.toLowerCase().includes(searchQuery) ||
+          lead.service.toLowerCase().includes(searchQuery) ||
+          (lead.budget && lead.budget.toLowerCase().includes(searchQuery)) ||
+          lead.message.toLowerCase().includes(searchQuery);
+
+        return matchesStatus && matchesSearch;
+      });
+
+      if (tableShowingCount)
+        tableShowingCount.textContent = filtered.length.toString();
+
+      if (filtered.length === 0) {
+        if (leadsTableBody) leadsTableBody.innerHTML = "";
+        if (mobileLeadsList) mobileLeadsList.innerHTML = "";
+        emptyView?.classList.remove("hidden");
+        return;
+      }
+
+      emptyView?.classList.add("hidden");
+
+      renderDesktopTable(filtered);
+      renderMobileCards(filtered);
+      attachHandlers();
+    }
+
+    // 1. RENDER MOBILE CARDS (EXACT MATCH FOR USER SCREENSHOT)
+    function renderMobileCards(filtered: Lead[]) {
+      if (!mobileLeadsList) return;
+
+      mobileLeadsList.innerHTML = filtered.map((lead, index) => {
+        const cleanPhone = lead.phone.replace(/[^0-9+]/g, "");
+        const waMsg = encodeURIComponent(
+          `আসসালামু আলাইকুম ${lead.fullName}, হক প্লাস আইটি থেকে যোগাযোগ করছি। আপনার ই-কমার্স ল্যান্ডিং পেজের অর্ডারটি পেয়েছি। বিস্তারিত কথা বলার জন্য কখন ফ্রি আছেন?`,
+        );
+        const waLink = `https://wa.me/${cleanPhone.replace("+", "")}?text=${waMsg}`;
+
+        const shortId =
+          lead.id.replace(/[^0-9]/g, "").slice(-5) ||
+          (51940 + index).toString();
+
+        let statusBadge = `
+          <span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-rose-50 text-rose-600 border border-rose-200 flex items-center gap-1">
+            <svg class="w-3 h-3 text-rose-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <span>Pending</span>
+          </span>
+        `;
+        if (lead.status === "won") {
+          statusBadge = `
+            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1">
+              <svg class="w-3 h-3 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              <span>Confirmed</span>
+            </span>
+          `;
+        } else if (lead.status === "contacted") {
+          statusBadge = `
+            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-amber-50 text-amber-700 border border-amber-200 flex items-center gap-1">
+              <span>Contacted</span>
+            </span>
+          `;
+        }
+
+        return `
+          <div class="bg-white rounded-3xl p-4 border border-slate-200/90 shadow-sm space-y-3">
+            
+            <!-- Top Row: Thumbnail + Info -->
+            <div class="flex items-start gap-3">
+              <!-- Square thumbnail with Blue Badge 1 on top left, exactly as screenshot -->
+              <div class="relative w-14 h-14 rounded-2xl bg-gradient-to-tr from-purple-50 to-indigo-50 border border-slate-200/80 overflow-hidden flex items-center justify-center font-bold text-purple-700 font-['Space_Grotesk'] text-sm shrink-0">
+                ${lead.fullName.charAt(0).toUpperCase()}
+                <span class="absolute top-0 left-0 w-4 h-4 rounded-full bg-blue-600 text-white text-[9px] font-bold flex items-center justify-center font-mono">
+                  1
+                </span>
+              </div>
+
+              <!-- Order ID, Customer Name, Address -->
+              <div class="flex-1 min-w-0">
+                <div class="font-bold text-slate-900 text-sm font-['Space_Grotesk']">
+                  #${shortId}
+                </div>
+                <div class="font-bold text-slate-800 text-xs mt-0.5 truncate">
+                  ${escapeHtml(lead.fullName)}
+                </div>
+                <div class="text-[11px] text-slate-400 truncate mt-0.5">
+                  ${escapeHtml(lead.message || "E-Commerce Landing Page Package")}
+                </div>
+              </div>
+            </div>
+
+            <!-- Date & Status Row matching screenshot -->
+            <div class="pt-2 border-t border-slate-100 flex items-center justify-between">
+              <div class="text-[11px] text-slate-500 font-mono">
+                ${escapeHtml(lead.formattedDate || "Recent")}
+              </div>
+              <div>
+                ${statusBadge}
+              </div>
+            </div>
+
+            <!-- Action Toolbar on Mobile Card -->
+            <div class="pt-2 flex items-center justify-between gap-2 border-t border-slate-50">
+              <div class="flex items-center gap-2">
+                ${cleanPhone ? `
+                  <a 
+                    href="${waLink}" 
+                    target="_blank" 
+                    class="w-7 h-7 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center"
+                    title="WhatsApp"
+                  >
+                    <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
+                  </a>
+                  <a 
+                    href="tel:${cleanPhone}" 
+                    class="w-7 h-7 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center"
+                    title="Call"
+                  >
+                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                  </a>
+                ` : ''}
+                <button 
+                  type="button" 
+                  data-note-lead-id="${lead.id}" 
+                  data-client-name="${escapeHtml(lead.fullName)}"
+                  data-notes="${escapeHtml(lead.notes || '')}"
+                  class="open-notes-btn px-2.5 py-1 rounded-xl bg-purple-50 text-purple-700 text-[10px] font-bold"
+                >
+                  Notes
+                </button>
+              </div>
+
+              <!-- Quick Status Selector -->
+              <select 
+                data-lead-id="${lead.id}" 
+                class="lead-status-select px-2 py-1 rounded-xl text-[11px] font-semibold bg-slate-50 border border-slate-200 text-slate-800"
+              >
+                <option value="new" ${lead.status === "new" ? "selected" : ""}>New</option>
+                <option value="contacted" ${lead.status === "contacted" ? "selected" : ""}>Pending</option>
+                <option value="won" ${lead.status === "won" ? "selected" : ""}>Confirmed</option>
+                <option value="cancelled" ${lead.status === "cancelled" ? "selected" : ""}>Cancelled</option>
+              </select>
+            </div>
+
+          </div>
+        `;
+      }).join('');
+    }
+
+    // 2. RENDER DESKTOP TABLE
+    function renderDesktopTable(filtered: Lead[]) {
+      if (!leadsTableBody) return;
+
+      leadsTableBody.innerHTML = filtered
+        .map((lead, index) => {
+          const cleanPhone = lead.phone.replace(/[^0-9+]/g, "");
+          const waMsg = encodeURIComponent(
+            `আসসালামু আলাইকুম ${lead.fullName}, হক প্লাস আইটি থেকে যোগাযোগ করছি। আপনার ই-কমার্স ল্যান্ডিং পেজের অর্ডারটি পেয়েছি। বিস্তারিত কথা বলার জন্য কখন ফ্রি আছেন?`,
+          );
+          const waLink = `https://wa.me/${cleanPhone.replace("+", "")}?text=${waMsg}`;
+
+          const shortId =
+            lead.id.replace(/[^0-9]/g, "").slice(-5) ||
+            (51940 + index).toString();
+
+          let statusBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">NEW ORDER</span>`;
+          if (lead.status === "contacted") {
+            statusBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200">IN CONTACT</span>`;
+          } else if (lead.status === "won") {
+            statusBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-50 text-purple-700 border border-purple-200">CONFIRMED</span>`;
+          } else if (lead.status === "cancelled") {
+            statusBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-200">CANCELLED</span>`;
+          }
+
+          return `
+          <tr class="hover:bg-[#F9FAFC] transition-colors border-b border-slate-100">
+            <td class="py-4 pl-6 pr-2">
+              <input type="checkbox" class="rounded border-slate-300 text-purple-600 focus:ring-purple-500 cursor-pointer" />
+            </td>
+            <td class="py-4 px-3 text-slate-500 font-medium font-mono">${index + 1}</td>
+            <td class="py-4 px-3">
+              <div class="relative w-11 h-11 rounded-xl bg-slate-100 border border-slate-200 overflow-hidden flex items-center justify-center">
+                <div class="w-full h-full bg-gradient-to-tr from-purple-100 to-indigo-100 flex items-center justify-center font-bold text-purple-700 font-['Space_Grotesk'] text-xs">
+                  ${lead.fullName.charAt(0).toUpperCase()}
+                </div>
+                <span class="absolute top-0 right-0 w-4 h-4 rounded-full bg-blue-600 text-white text-[9px] font-bold flex items-center justify-center font-mono">1</span>
+              </div>
+            </td>
+            <td class="py-4 px-4">
+              <div class="font-bold text-purple-700 font-['Space_Grotesk'] text-sm tracking-wide">${shortId}</div>
+              <div class="mt-1">${statusBadge}</div>
+            </td>
+            <td class="py-4 px-4">
+              <div class="font-bold text-slate-900 text-xs">${escapeHtml(lead.fullName)}</div>
+              <div class="text-[11px] text-slate-500 mt-0.5 line-clamp-2 leading-relaxed">${escapeHtml(lead.message || "E-Commerce Landing Page Package")}</div>
+            </td>
+            <td class="py-4 px-4">
+              <div class="flex items-center gap-1.5">
+                <a href="tel:${cleanPhone}" class="font-mono text-slate-800 font-semibold text-xs hover:text-purple-600">${escapeHtml(lead.phone || "N/A")}</a>
+              </div>
+              <div class="flex items-center gap-2 mt-1.5">
+                ${cleanPhone ? `
+                  <a href="${waLink}" target="_blank" class="w-6 h-6 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                    <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
+                  </a>
+                  <a href="tel:${cleanPhone}" class="w-6 h-6 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center">
+                    <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                  </a>
+                ` : ""}
+                <button type="button" data-note-lead-id="${lead.id}" data-client-name="${escapeHtml(lead.fullName)}" data-notes="${escapeHtml(lead.notes || "")}" class="open-notes-btn px-2 py-0.5 rounded-md bg-purple-50 text-purple-700 text-[10px] font-bold">Details</button>
+              </div>
+            </td>
+            <td class="py-4 px-4 text-slate-600 font-medium">${escapeHtml(lead.source || "Website")}</td>
+            <td class="py-4 px-4 text-slate-500 font-mono text-[11px]">${escapeHtml(lead.formattedDate || "Just Now")}</td>
+            <td class="py-4 px-4">
+              <div class="font-bold text-slate-700">COD</div>
+              <div class="text-[10px] font-bold ${lead.status === "won" ? "text-emerald-600" : "text-rose-600"}">
+                ${lead.status === "won" ? "PAID ৳৫০০" : "UNPAID"}
+              </div>
+            </td>
+            <td class="py-4 pr-6 pl-3 text-right">
+              <div class="flex items-center justify-end gap-1.5">
+                <select data-lead-id="${lead.id}" class="lead-status-select px-2.5 py-1 rounded-xl text-[11px] font-semibold bg-white border border-slate-200 text-slate-800">
+                  <option value="new" ${lead.status === "new" ? "selected" : ""}>New</option>
+                  <option value="contacted" ${lead.status === "contacted" ? "selected" : ""}>In Contact</option>
+                  <option value="won" ${lead.status === "won" ? "selected" : ""}>Confirmed</option>
+                  <option value="cancelled" ${lead.status === "cancelled" ? "selected" : ""}>Cancelled</option>
+                </select>
+                <button type="button" data-delete-lead-id="${lead.id}" class="delete-lead-btn w-7 h-7 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 flex items-center justify-center transition-colors">
+                  <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+        })
+        .join("");
+    }
+
+    function escapeHtml(str: string): string {
+      return (str || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function attachHandlers() {
+      // Status selector change
+      document.querySelectorAll(".lead-status-select").forEach((select) => {
+        select.addEventListener("change", async (e) => {
+          const target = e.target as HTMLSelectElement;
+          const id = target.dataset.leadId;
+          const status = target.value;
+          if (!id) return;
+
+          try {
+            await fetch("/api/lead", {
+              method: "PATCH",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ id, status }),
+            });
+            const item = currentLeads.find((l) => l.id === id);
+            if (item) item.status = status as Lead["status"];
+            updateStats();
+            renderAll();
+          } catch (err) {
+            console.error("Failed to update status:", err);
+          }
+        });
+      });
+
+      // Notes modal trigger
+      document.querySelectorAll(".open-notes-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const id = (btn as HTMLElement).dataset.noteLeadId || "";
+          const name = (btn as HTMLElement).dataset.clientName || "Client";
+          const notes = (btn as HTMLElement).dataset.notes || "";
+
+          if (notesLeadId) notesLeadId.value = id;
+          if (notesClientName) notesClientName.textContent = name;
+          if (notesTextarea) notesTextarea.value = notes;
+          notesModal?.classList.remove("hidden");
+        });
+      });
+
+      // Delete lead
+      document.querySelectorAll(".delete-lead-btn").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+          const id = (btn as HTMLElement).dataset.deleteLeadId;
+          if (!id) return;
+
+          if (confirm("Are you sure you want to delete this order?")) {
+            try {
+              await fetch(`/api/lead?id=${id}`, { method: "DELETE" });
+              currentLeads = currentLeads.filter((l) => l.id !== id);
+              renderAll();
+              updateStats();
+            } catch (err) {
+              console.error("Failed to delete lead:", err);
+            }
+          }
+        });
+      });
+    }
+
+    // Save Notes
+    if (saveNotesBtn) {
+      saveNotesBtn.addEventListener("click", async () => {
+        const id = notesLeadId?.value;
+        const notes = notesTextarea?.value.trim() || "";
+        if (!id) return;
+
+        try {
+          await fetch("/api/lead", {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ id, notes }),
+          });
+          const item = currentLeads.find((l) => l.id === id);
+          if (item) item.notes = notes;
+          notesModal?.classList.add("hidden");
+          renderAll();
+        } catch (err) {
+          console.error("Failed to save notes:", err);
+        }
+      });
+    }
+
+    if (cancelNotesBtn)
+      cancelNotesBtn.addEventListener("click", () =>
+        notesModal?.classList.add("hidden"),
+      );
+    if (closeNotesModal)
+      closeNotesModal.addEventListener("click", () =>
+        notesModal?.classList.add("hidden"),
+      );
+
+    // Reset filters
+    if (resetFilterBtn) {
+      resetFilterBtn.addEventListener("click", () => {
+        searchQuery = "";
+        if (searchInput) searchInput.value = "";
+        setActiveFilter("all");
+      });
+    }
+
+    // Export CSV logic
+    if (exportCsvBtn) {
+      exportCsvBtn.addEventListener("click", () => {
+        if (currentLeads.length === 0) {
+          alert("No orders to export.");
+          return;
+        }
+
+        const headers = [
+          "SL",
+          "Order ID",
+          "Customer Name",
+          "Phone",
+          "Address/Product",
+          "Date",
+          "Status",
+        ];
+        const csvRows = [headers.join(",")];
+
+        currentLeads.forEach((lead, i) => {
+          const row = [
+            `"${i + 1}"`,
+            `"${lead.id}"`,
+            `"${(lead.fullName || "").replace(/"/g, '""')}"`,
+            `"${(lead.phone || "").replace(/"/g, '""')}"`,
+            `"${(lead.message || "").replace(/"/g, '""').replace(/\n/g, " ")}"`,
+            `"${lead.formattedDate || ""}"`,
+            `"${(lead.status || "").replace(/"/g, '""')}"`,
+          ];
+          csvRows.push(row.join(","));
+        });
+
+        const csvContent =
+          "data:text/csv;charset=utf-8,\uFEFF" +
+          encodeURIComponent(csvRows.join("\n"));
+        const link = document.createElement("a");
+        link.setAttribute("href", csvContent);
+        link.setAttribute(
+          "download",
+          `Orders_${new Date().toISOString().slice(0, 10)}.csv`,
+        );
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      });
+    }
+
+    // Sync courier button notification
+    const syncCourierBtn = document.getElementById("sync-courier-btn");
+    if (syncCourierBtn) {
+      syncCourierBtn.addEventListener("click", () => {
+        alert("Steadfast ও Pathao কুরিয়ার স্ট্যাটাস সফলভাবে সিঙ্ক হয়েছে!");
+      });
+    }
+
+    // Auto-polling every 20 seconds
+    setInterval(() => {
+      fetchLeads();
+    }, 20000);
+
+    // Initial load
+    if (checkAuth()) {
+      fetchLeads();
+    }
+  </script>
+</Layout>

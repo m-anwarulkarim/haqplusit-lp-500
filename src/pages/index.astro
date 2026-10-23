@@ -1,0 +1,1003 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Navbar from "../components/Navbar.astro";
+import FloatingWhatsApp from "../components/FloatingWhatsApp.astro";
+
+const WA_NUMBER = "8801560007230";
+const waLink = (text: string) =>
+  `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(text)}`;
+
+const features = [
+  {
+    icon: "speed",
+    title: "বিদ্যুৎগতির লোডিং",
+    tag: "০.৫ সেকেন্ড স্পিড",
+    text: "হাতে কোড করা হালকা পেজ, তাই ফেসবুক অ্যাডের ক্লিক সাথে সাথে পেজে খোলে—কাস্টমার অপেক্ষা করে না।",
+    badgeBg: "bg-amber-50 text-amber-800 border-amber-200",
+    iconBg: "bg-gradient-to-tr from-amber-500 to-yellow-400 text-white shadow-amber-500/25",
+    cardBg: "from-amber-50/50 via-white to-white",
+    borderColor: "border-amber-200/90 hover:border-amber-400 hover:shadow-amber-500/10",
+  },
+  {
+    icon: "cart",
+    title: "১-ক্লিকে অর্ডার ফর্ম",
+    tag: "সহজ ক্যাশ অন ডেলিভারি",
+    text: "নাম, ফোন ও ঠিকানা—ছোট ফর্মেই ক্যাশ-অন-ডেলিভারি অর্ডার সম্পন্ন।",
+    badgeBg: "bg-blue-50 text-blue-800 border-blue-200",
+    iconBg: "bg-gradient-to-tr from-blue-600 to-cyan-500 text-white shadow-blue-500/25",
+    cardBg: "from-blue-50/50 via-white to-white",
+    borderColor: "border-blue-200/90 hover:border-blue-400 hover:shadow-blue-500/10",
+  },
+  {
+    icon: "pixel",
+    title: "ফেসবুক পিক্সেল ও CAPI",
+    tag: "১০০% নির্ভুল ট্র্যাকিং",
+    text: "সঠিক ট্র্যাকিংয়ের জন্য পিক্সেল ও কনভার্সন API সেটআপ, যাতে অ্যাড অপটিমাইজ করা যায়।",
+    badgeBg: "bg-purple-50 text-purple-800 border-purple-200",
+    iconBg: "bg-gradient-to-tr from-purple-600 to-indigo-500 text-white shadow-purple-500/25",
+    cardBg: "from-purple-50/50 via-white to-white",
+    borderColor: "border-purple-200/90 hover:border-purple-400 hover:shadow-purple-500/10",
+  },
+  {
+    icon: "shield",
+    title: "ফেক অর্ডার ব্লকার",
+    tag: "ডেলিভারি লস প্রতিরোধ",
+    text: "ভুয়া ও স্প্যাম অর্ডার ফিল্টার করে আপনার কুরিয়ার খরচ ও রিটার্ন কমায়।",
+    badgeBg: "bg-rose-50 text-rose-800 border-rose-200",
+    iconBg: "bg-gradient-to-tr from-rose-600 to-pink-500 text-white shadow-rose-500/25",
+    cardBg: "from-rose-50/50 via-white to-white",
+    borderColor: "border-rose-200/90 hover:border-rose-400 hover:shadow-rose-500/10",
+  },
+  {
+    icon: "box",
+    title: "কুরিয়ার অটোমেশন",
+    tag: "Steadfast ও Pathao",
+    text: "Steadfast ও Pathao-তে এক ক্লিকে বুকিং—বারবার হাতে ডেটা বসানোর ঝামেলা নেই।",
+    badgeBg: "bg-emerald-50 text-emerald-800 border-emerald-200",
+    iconBg: "bg-gradient-to-tr from-emerald-600 to-teal-500 text-white shadow-emerald-500/25",
+    cardBg: "from-emerald-50/50 via-white to-white",
+    borderColor: "border-emerald-200/90 hover:border-emerald-400 hover:shadow-emerald-500/10",
+  },
+  {
+    icon: "chart",
+    title: "মোবাইল ড্যাশবোর্ড",
+    tag: "রিয়েল-টাইম কন্ট্রোল",
+    text: "ফোন থেকেই লাইভ অর্ডার দেখুন, স্ট্যাটাস আপডেট করুন ও ম্যানেজ করুন।",
+    badgeBg: "bg-violet-50 text-violet-800 border-violet-200",
+    iconBg: "bg-gradient-to-tr from-violet-600 to-purple-600 text-white shadow-violet-500/25",
+    cardBg: "from-violet-50/50 via-white to-white",
+    borderColor: "border-violet-200/90 hover:border-violet-400 hover:shadow-violet-500/10",
+  },
+];
+
+const steps = [
+  {
+    n: "১",
+    title: "ফর্ম পূরণ করুন",
+    text: "আপনার প্রোডাক্ট বা ফেসবুক পেজের তথ্য দিয়ে রিকোয়েস্ট পাঠান।",
+  },
+  {
+    n: "২",
+    title: "ডেমো দেখুন",
+    text: "আমরা যোগাযোগ করে আপনার প্রোডাক্টের ডেমো পেজ দেখাব।",
+  },
+  {
+    n: "৩",
+    title: "পছন্দ হলে লাইভ",
+    text: "অনুমোদনের পর ২৪–৪৮ ঘণ্টায় ডোমেইনসহ পেজ লাইভ।",
+  },
+];
+
+const plan = {
+  id: "all_in_one",
+  tag: "সম্পূর্ণ অল-ইন-ওয়ান প্যাকেজ",
+  name: "ই-কমার্স ল্যান্ডিং পেজ সেটআপ",
+  price: "৫০০",
+  value: "৳৫০০ - অল-ইন-ওয়ান ই-কমার্স ল্যান্ডিং পেজ (সবকিছু অন্তর্ভুক্ত)",
+  tagline: "কাস্টম পেজ • ফেসবুক পিক্সেল ও CAPI • মোবাইল ড্যাশবোর্ড • কুরিয়ার অটোমেশন • ফ্রড ব্লকার",
+  cta: "মাত্র ৫০০ টাকায় পেজ বুক করুন",
+  features: [
+    {
+      badge: "স্পিড অপটিমাইজেশন",
+      badgeClass: "bg-amber-50 text-amber-700 border-amber-200",
+      icon: "speed",
+      iconClass: "bg-amber-100 text-amber-600",
+      title: "কাস্টম কোডেড হাই-পারফরম্যান্স ল্যান্ডিং পেজ",
+      desc: "ভারী থিম বা প্লাগইন ছাড়া পিওর কাস্টম কোডিং—বিজ্ঞাপনের ট্রাফিকে ক্লিক করলেই ০.৫ সেকেন্ডে লাইটওয়েট পেজ ওপেন হবে। ড্রপ-অফ রেট কমিয়ে সেলস বাড়াতে এটি অত্যন্ত কার্যকর।",
+    },
+    {
+      badge: "হাই কনভার্সন",
+      badgeClass: "bg-blue-50 text-blue-700 border-blue-200",
+      icon: "cart",
+      iconClass: "bg-blue-100 text-blue-600",
+      title: "১-ক্লিক এক্সপ্রেস ক্যাশ-অন-ডেলিভারি (COD) ফর্ম",
+      desc: "শুধুমাত্র নাম, ফোন নম্বর ও ডেলিভারি ঠিকানা—অপ্রয়োজনীয় ফিল্ড ছাড়া কাস্টমার মাত্র ৩ সেকেন্ডে নিশ্চিন্তে অর্ডার সম্পন্ন করতে পারে। ফলে কনভার্সন রেট বাড়ে সর্বোচ্চ।",
+    },
+    {
+      badge: "অ্যাড ট্র্যাকিং",
+      badgeClass: "bg-purple-50 text-purple-700 border-purple-200",
+      icon: "pixel",
+      iconClass: "bg-purple-100 text-purple-600",
+      title: "ফেসবুক পিক্সেল ও সার্ভার CAPI ফুল সেটআপ",
+      desc: "iOS 14+ ও অ্যাড-ব্লকার সমাধান—ViewContent থেকে শুরু করে Purchase পর্যন্ত প্রতিটি ইভেন্টের ১০০% নির্ভুল ট্র্যাকিং নিশ্চিত করে বিজ্ঞাপনী খরচ উল্লেখযোগ্যভাবে কমায়।",
+    },
+    {
+      badge: "রিয়েল-টাইম কন্ট্রোল",
+      badgeClass: "bg-violet-50 text-violet-700 border-violet-200",
+      icon: "mobile",
+      iconClass: "bg-violet-100 text-violet-600",
+      title: "লাইভ মোবাইল অর্ডার ম্যানেজমেন্ট পোর্টাল (OMS)",
+      desc: "ল্যাপটপ বা কম্পিউটার ছাড়াই যেকোনো স্মার্টফোন থেকে রিয়েল-টাইমে অর্ডার পর্যবেক্ষণ, ডেলিভারি স্ট্যাটাস আপডেট এবং কাস্টমারদের ডাটাবেজ সহজে নিয়ন্ত্রণ করার সম্পূর্ণ সুবিধা।",
+    },
+    {
+      badge: "লস প্রিভেনশন",
+      badgeClass: "bg-rose-50 text-rose-700 border-rose-200",
+      icon: "shield",
+      iconClass: "bg-rose-100 text-rose-600",
+      title: "ইন্টেলিজেন্ট ফ্রড ডিটেকশন ও ফেক অর্ডার ব্লকার",
+      desc: "একই নম্বরের একাধিক ডুপ্লিকেট সাবমিশন ও স্প্যাম অর্ডার স্বয়ংক্রিয়ভাবে ফিল্টার করে। এতে পার্সেল ডেলিভারি ফেইলিউর হ্রাস পায় এবং কুরিয়ার রিটার্ন চার্জের ক্ষতি বন্ধ হয়।",
+    },
+    {
+      badge: "লজিস্টিক অটোমেশন",
+      badgeClass: "bg-emerald-50 text-emerald-700 border-emerald-200",
+      icon: "truck",
+      iconClass: "bg-emerald-100 text-emerald-600",
+      title: "Steadfast ও Pathao কুরিয়ার ওয়ান-ক্লিক অটোমেশন",
+      desc: "বারবার হাতে ঠিকানা টাইপ করার ঝামেলা ও ভুল এড়াতে ১-ক্লিকেই সরাসরি কুরিয়ার প্যানেলে পার্সেল বুকিং এবং গ্রাহকের জন্য তাৎক্ষণিক ট্র্যাকিং আইডি জেনারেট।",
+    },
+    {
+      badge: "ইনস্ট্যান্ট চ্যাট",
+      badgeClass: "bg-teal-50 text-teal-700 border-teal-200",
+      icon: "whatsapp",
+      iconClass: "bg-teal-100 text-teal-600",
+      title: "ডায়নামিক WhatsApp বিজনেস চ্যাট ও কাস্টমার সাপোর্ট",
+      desc: "ল্যান্ডিং পেজেই যুক্ত থাকে ওয়ান-ট্যাপ হোয়াটসঅ্যাপ বাটন। ক্রেতার যেকোনো প্রশ্ন থাকলে সরাসরি আপনার সাথে চ্যাট করে দ্বিধাহীনভাবে পণ্য অর্ডার কনফার্ম করতে পারবে।",
+    },
+    {
+      badge: "ফুল রেসপন্সিভ",
+      badgeClass: "bg-sky-50 text-sky-700 border-sky-200",
+      icon: "device",
+      iconClass: "bg-sky-100 text-sky-600",
+      title: "মোবাইল-ফার্স্ট ১০০% অ্যাডাপ্টিভ প্রিমিয়াম লেআউট",
+      desc: "ফেসবুক ও ইনস্টাগ্রাম ইন-অ্যাপ ব্রাউজারসহ যেকোনো অ্যান্ড্রয়েড, আইফোন এবং ডেস্কটপ কম্পিউটারে অত্যন্ত দ্রুত, মসৃণ এবং বিশ্বমানের প্রিমিয়াম ডিসপ্লে নিশ্চিত।",
+    },
+    {
+      badge: "জিরো রিস্ক",
+      badgeClass: "bg-green-50 text-green-700 border-green-200",
+      icon: "check",
+      iconClass: "bg-emerald-100 text-emerald-600",
+      title: "১০০% রিস্ক-ফ্রি ডেমো ফার্স্ট গ্যারান্টি (জিরো অগ্রিম)",
+      desc: "কাজ শুরুর আগে কোনো অগ্রিম টাকা নেওয়া হয় না। আগে আপনার পণ্যের তথ্য দিয়ে প্রস্তুতকৃত পূর্ণাঙ্গ লাইভ পেজটি দেখুন—সম্পূর্ণ পছন্দ ও নিশ্চিত হলেই মাত্র ৫০০ টাকা পরিশোধ করুন।",
+    },
+    {
+      badge: "এক্সপ্রেস ডেলিভারি",
+      badgeClass: "bg-indigo-50 text-indigo-700 border-indigo-200",
+      icon: "clock",
+      iconClass: "bg-indigo-100 text-indigo-600",
+      title: "২৪ ঘণ্টার মধ্যে কমপ্লিট পেজ রেডি ও লাইভ লঞ্চ",
+      desc: "প্রোডাক্টের ছবি ও প্রয়োজনীয় তথ্য পাওয়ার ঠিক ২৪ ঘণ্টার মধ্যে আপনার পুরো ল্যান্ডিং পেজ সেটআপ সম্পন্ন করে লাইভ ক্যাম্পেইনের জন্য হ্যান্ডওভার করা হবে।",
+    },
+  ],
+};
+
+const packages = [plan];
+
+const faqs = [
+  {
+    q: "অগ্রিম কোনো পেমেন্ট দিতে হবে?",
+    a: "না। আগে আপনার প্রোডাক্টের ডেমো পেজ দেখানো হবে। ডেমো পছন্দ হলে তবেই কাজ এগিয়ে যাবে।",
+  },
+  {
+    q: "পেজ ডেলিভারি পেতে কত সময় লাগবে?",
+    a: "২৪ ঘণ্টার মধ্যে ডেমো পেজ রেডি করে আপনাকে দেখানো হয়। অনুমোদন পেলে ডোমেইনে পেজ লাইভ করে দেওয়া হয়।",
+  },
+  {
+    q: "৫০০ টাকা কি এককালীন, নাকি মাসিক?",
+    a: "সম্পূর্ণ এককালীন। কোনো মাসিক ফি বা লুকানো চার্জ নেই।",
+  },
+  {
+    q: "আমার ফেসবুক পিক্সেল কি বসানো যাবে?",
+    a: "হ্যাঁ। আপনার ফেসবুক পিক্সেল ও কনভার্সন API (CAPI) আমরাই সম্পূর্ণ সেটআপ করে দেব।",
+  },
+  {
+    q: "৫০০ টাকার অফারটি কতদিন চলবে?",
+    a: "এই বিশেষ অফারটি মূলত হক প্লাস আইটির প্রচার ও প্রসারের উদ্দেশ্যে চালু করা হয়েছে। এই অফারটি পাবেন কেবল প্রথম ৫ জন উদ্যোক্তা। ৫টি স্লট পূরণ হওয়ার পর রেগুলার মূল্য প্রযোজ্য হবে।",
+  },
+  {
+    q: "অর্ডার কীভাবে পাব?",
+    a: "অর্ডার সরাসরি WhatsApp-এ আসবে এবং সঙ্গে সঙ্গে আপনার মোবাইল ড্যাশবোর্ডেও অটোমেটিক জমা হবে।",
+  },
+];
+---
+
+<Layout
+  title="মাত্র ৫০০ টাকায় হাই-কনভার্টিং ই-কমার্স ল্যান্ডিং পেজ | HaqPlus IT"
+  description="হক প্লাস আইটি বানাচ্ছে কাস্টম কোডেড দ্রুতগতির ল্যান্ডিং পেজ। ফেসবুক পিক্সেল সেটআপ, এক ক্লিকে অর্ডার, ফেক অর্ডার ব্লকার ও কুরিয়ার ম্যানেজমেন্ট ড্যাশবোর্ড।"
+>
+  <Navbar />
+
+  <main
+    class="bg-white text-slate-900 antialiased font-['Hind_Siliguri',sans-serif] overflow-x-hidden"
+  >
+    <!-- HERO -->
+    <section class="relative bg-gradient-to-b from-blue-50/70 to-white">
+      <div
+        class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 lg:py-20"
+      >
+        <div
+          class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start"
+        >
+          <!-- Left -->
+          <div class="lg:col-span-7">
+            <span
+              class="inline-flex items-center gap-2 rounded-full border border-rose-200 bg-rose-50/90 px-3.5 py-1.5 text-xs sm:text-sm font-semibold text-rose-700 shadow-sm"
+            >
+              <span class="relative flex h-2 w-2">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2 w-2 bg-rose-600"></span>
+              </span>
+              <span>হক প্লাস আইটি প্রচার অফার • প্রথম ৫ জনের জন্য বরাদ্দ</span>
+            </span>
+
+            <h1
+              class="mt-5 text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-[1.3] tracking-tight text-slate-900"
+            >
+              আপনার প্রোডাক্টের জন্য{" "}
+              <span class="text-blue-600">দ্রুতগতির ই-কমার্স ল্যান্ডিং পেজ</span>
+            </h1>
+
+            <p
+              class="mt-5 text-base sm:text-lg leading-relaxed text-slate-600 max-w-xl"
+            >
+              হক প্লাস আইটির প্রচার উপলক্ষে মাত্র ৫০০ টাকায় সম্পূর্ণ কাস্টম ল্যান্ডিং পেজ সেটআপ দেওয়া হচ্ছে। <strong class="text-slate-900 font-bold">এই বিশেষ অফারটি পাবেন মাত্র ৫ জন উদ্যোক্তা।</strong> ফেসবুক অ্যাডের ক্লিককে সরাসরি ক্যাশ-অন-ডেলিভারি অর্ডারে রূপান্তর করুন।
+            </p>
+
+            <!-- 4 Colorful Feature Mini Cards (2 per line on mobile) -->
+            <div class="mt-6 grid grid-cols-2 gap-2.5 sm:gap-3 max-w-xl">
+              <!-- Card 1: 1-Click Order Form -->
+              <div class="flex items-center gap-2.5 p-2.5 sm:p-3 rounded-xl bg-blue-50/70 border border-blue-200/80 hover:bg-blue-50 transition shadow-sm">
+                <div class="flex h-8 w-8 sm:h-9 sm:w-9 shrink-0 items-center justify-center rounded-lg bg-blue-600 text-white shadow-sm shadow-blue-500/20">
+                  <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                  </svg>
+                </div>
+                <div class="min-w-0">
+                  <h4 class="text-xs sm:text-sm font-bold text-slate-900 leading-snug truncate">১-ক্লিক অর্ডার ফর্ম</h4>
+                  <p class="text-[10px] sm:text-xs text-slate-500 truncate mt-0.5">সহজ COD চেকআউট</p>
+                </div>
+              </div>
+
+              <!-- Card 2: Pixel & CAPI -->
+              <div class="flex items-center gap-2.5 p-2.5 sm:p-3 rounded-xl bg-indigo-50/70 border border-indigo-200/80 hover:bg-indigo-50 transition shadow-sm">
+                <div class="flex h-8 w-8 sm:h-9 sm:w-9 shrink-0 items-center justify-center rounded-lg bg-indigo-600 text-white shadow-sm shadow-indigo-500/20">
+                  <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                  </svg>
+                </div>
+                <div class="min-w-0">
+                  <h4 class="text-xs sm:text-sm font-bold text-slate-900 leading-snug truncate">পিক্সেল ও CAPI</h4>
+                  <p class="text-[10px] sm:text-xs text-slate-500 truncate mt-0.5">অ্যাকুরেট ট্র্যাকিং</p>
+                </div>
+              </div>
+
+              <!-- Card 3: Fake Order Blocker -->
+              <div class="flex items-center gap-2.5 p-2.5 sm:p-3 rounded-xl bg-emerald-50/70 border border-emerald-200/80 hover:bg-emerald-50 transition shadow-sm">
+                <div class="flex h-8 w-8 sm:h-9 sm:w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-600 text-white shadow-sm shadow-emerald-500/20">
+                  <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                  </svg>
+                </div>
+                <div class="min-w-0">
+                  <h4 class="text-xs sm:text-sm font-bold text-slate-900 leading-snug truncate">ফেক অর্ডার ব্লকার</h4>
+                  <p class="text-[10px] sm:text-xs text-slate-500 truncate mt-0.5">রিটার্ন লস প্রতিরোধ</p>
+                </div>
+              </div>
+
+              <!-- Card 4: Courier Automation -->
+              <div class="flex items-center gap-2.5 p-2.5 sm:p-3 rounded-xl bg-amber-50/70 border border-amber-200/80 hover:bg-amber-50 transition shadow-sm">
+                <div class="flex h-8 w-8 sm:h-9 sm:w-9 shrink-0 items-center justify-center rounded-lg bg-amber-600 text-white shadow-sm shadow-amber-500/20">
+                  <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                  </svg>
+                </div>
+                <div class="min-w-0">
+                  <h4 class="text-xs sm:text-sm font-bold text-slate-900 leading-snug truncate">কুরিয়ার অটোমেশন</h4>
+                  <p class="text-[10px] sm:text-xs text-slate-500 truncate mt-0.5">Steadfast ও Pathao</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-8 flex flex-col sm:flex-row gap-3">
+              <a
+                href={waLink(
+                  "Hello HaqPlus IT, I want to order the 500 Taka Ecommerce Landing Page.",
+                )}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-6 py-3.5 text-sm sm:text-base font-bold text-white shadow-sm transition hover:bg-emerald-700 active:scale-[0.98]"
+              >
+                হোয়াটসঅ্যাপে বুকিং করুন
+              </a>
+              <a
+                href="#packages"
+                class="inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white px-6 py-3.5 text-sm sm:text-base font-bold text-slate-700 transition hover:bg-slate-50"
+              >
+                প্যাকেজ ও রেট দেখুন
+              </a>
+            </div>
+
+            <dl
+              class="mt-8 grid grid-cols-3 gap-3 sm:gap-6 max-w-lg border-t border-slate-200 pt-6"
+            >
+              <div>
+                <dt class="text-lg sm:text-2xl font-extrabold text-slate-900">
+                  ২৪–৪৮
+                </dt>
+                <dd class="text-xs sm:text-sm text-slate-500">
+                  ঘণ্টায় ডেলিভারি
+                </dd>
+              </div>
+              <div>
+                <dt class="text-lg sm:text-2xl font-extrabold text-slate-900">
+                  COD
+                </dt>
+                <dd class="text-xs sm:text-sm text-slate-500">
+                  ফ্রেন্ডলি অর্ডার
+                </dd>
+              </div>
+              <div>
+                <dt class="text-lg sm:text-2xl font-extrabold text-slate-900">
+                  ৳০
+                </dt>
+                <dd class="text-xs sm:text-sm text-slate-500">
+                  অগ্রিম পেমেন্ট
+                </dd>
+              </div>
+            </dl>
+          </div>
+
+          <!-- Right: form -->
+          <div class="lg:col-span-5 scroll-mt-28" id="book-landing-page">
+            <div
+              class="rounded-2xl border border-slate-200 bg-white p-5 sm:p-7 shadow-xl shadow-slate-200/60"
+            >
+              <div id="lead-form-wrap">
+                <h2 class="text-xl sm:text-2xl font-bold text-slate-900">
+                  আপনার ল্যান্ডিং পেজ বুক করুন
+                </h2>
+                <p class="mt-1.5 text-sm text-slate-500">
+                  তথ্য দিন, আমরা ডেমোসহ আপনার সাথে যোগাযোগ করব।
+                </p>
+
+                <!-- Promotional Quota Notice -->
+                <div class="mt-3.5 rounded-xl border border-rose-200 bg-rose-50/80 p-3 text-xs text-rose-800 flex items-center justify-between gap-2 shadow-sm">
+                  <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-rose-600 animate-pulse shrink-0"></span>
+                    <span><strong>প্রচার অফার:</strong> এই সুযোগটি পাবেন মাত্র ৫ জন</span>
+                  </div>
+                  <span class="text-[11px] font-bold text-rose-700 bg-white px-2 py-0.5 rounded-md border border-rose-200 shrink-0">স্লট সীমিত</span>
+                </div>
+
+                <form id="lead-form" class="mt-5 space-y-4" novalidate>
+                  <div>
+                    <label
+                      for="lead-name"
+                      class="mb-1.5 block text-sm font-semibold text-slate-700"
+                    >
+                      আপনার নাম <span class="text-rose-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      id="lead-name"
+                      name="fullName"
+                      required
+                      autocomplete="name"
+                      placeholder="যেমন: তারেক হাসান"
+                      class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-base text-slate-900 placeholder:text-slate-400 focus:border-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-100"
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      for="lead-phone"
+                      class="mb-1.5 block text-sm font-semibold text-slate-700"
+                    >
+                      মোবাইল / WhatsApp নম্বর <span class="text-rose-500"
+                        >*</span
+                      >
+                    </label>
+                    <input
+                      type="tel"
+                      id="lead-phone"
+                      name="phone"
+                      required
+                      inputmode="tel"
+                      autocomplete="tel"
+                      placeholder="01XXXXXXXXX"
+                      class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-base text-slate-900 placeholder:text-slate-400 focus:border-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-100"
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      for="lead-product"
+                      class="mb-1.5 block text-sm font-semibold text-slate-700"
+                    >
+                      প্রোডাক্ট বা ফেসবুক পেজের নাম
+                    </label>
+                    <input
+                      type="text"
+                      id="lead-product"
+                      name="product"
+                      placeholder="যেমন: হানি নাট, গ্যাজেট, শাড়ি-পাঞ্জাবি"
+                      class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-base text-slate-900 placeholder:text-slate-400 focus:border-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-100"
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      class="mb-1.5 block text-sm font-semibold text-slate-700"
+                    >
+                      প্যাকেজ
+                    </label>
+                    <input
+                      type="hidden"
+                      id="lead-package"
+                      name="package"
+                      value={plan.value}
+                    />
+                    <div class="rounded-xl border-2 border-blue-500/20 bg-blue-50/60 p-4 transition">
+                      <div class="flex items-center justify-between gap-3">
+                        <div>
+                          <span class="inline-flex items-center gap-1.5 text-xs font-bold text-blue-700 bg-blue-100/90 px-2.5 py-0.5 rounded-full">
+                            <span class="w-1.5 h-1.5 rounded-full bg-blue-600"></span>
+                            অল-ইন-ওয়ান অফার
+                          </span>
+                          <h4 class="mt-1 text-sm sm:text-base font-extrabold text-slate-900">{plan.name}</h4>
+                          <p class="text-xs text-slate-600 mt-0.5">ল্যান্ডিং পেজ + পিক্সেল + ড্যাশবোর্ড + কুরিয়ার + ফ্রড ব্লকার</p>
+                        </div>
+                        <div class="text-right shrink-0">
+                          <div class="text-2xl sm:text-3xl font-black text-blue-600">৳{plan.price}</div>
+                          <div class="text-[11px] text-slate-500 font-medium">এককালীন</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <p
+                    id="lead-error"
+                    class="hidden rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-700"
+                    role="alert"
+                  >
+                  </p>
+
+                  <button
+                    type="submit"
+                    id="lead-submit"
+                    class="flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 py-3.5 text-base font-bold text-white shadow-sm transition hover:bg-blue-700 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70"
+                  >
+                    <span id="lead-submit-text">অর্ডার কনফার্ম করুন</span>
+                    <svg
+                      id="lead-spinner"
+                      class="hidden h-4 w-4 animate-spin"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      aria-hidden="true"
+                    >
+                      <circle
+                        class="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        stroke-width="4"></circle>
+                      <path
+                        class="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                    </svg>
+                  </button>
+
+                  <p class="text-center text-xs text-slate-500">
+                    কোনো অগ্রিম পেমেন্ট নেই। ডেমো দেখে পছন্দ হলে তবেই কাজ শুরু।
+                  </p>
+                </form>
+              </div>
+
+              <!-- Success -->
+              <div id="lead-success" class="hidden py-4 text-center">
+                <div
+                  class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-emerald-100 text-emerald-600"
+                >
+                  <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900">
+                  রিকোয়েস্ট পেয়েছি
+                </h3>
+                <p
+                  id="lead-success-msg"
+                  class="mx-auto mt-2 max-w-xs text-sm leading-relaxed text-slate-600"
+                >
+                </p>
+                <div class="mt-6 flex flex-col gap-2.5">
+                  <a
+                    id="lead-success-wa"
+                    href={waLink("Hello HaqPlus IT")}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="rounded-xl bg-emerald-600 px-4 py-3 text-sm font-bold text-white hover:bg-emerald-700"
+                  >
+                    হোয়াটসঅ্যাপে চ্যাট করুন
+                  </a>
+                  <button
+                    type="button"
+                    id="lead-reset"
+                    class="rounded-xl bg-slate-100 px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-200"
+                  >
+                    আরেকটি রিকোয়েস্ট দিন
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section
+      id="features"
+      class="scroll-mt-20 bg-slate-50 border-y border-slate-200"
+    >
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20">
+        <div class="mx-auto max-w-2xl text-center">
+          <p class="text-sm font-bold text-blue-600">কেন HaqPlus IT</p>
+          <h2
+            class="mt-2 text-2xl sm:text-3xl font-extrabold text-slate-900 leading-snug"
+          >
+            বিক্রি বাড়াতে যা যা দরকার, সবই এক পেজে
+          </h2>
+          <p class="mt-3 text-slate-600">
+            সাধারণ সাইট লোড হতে বেশি সময় নেয় এবং অনেক কাস্টমার অর্ডার না করেই
+            ফিরে যায়। আমরা তৈরি করি হালকা ও দ্রুত পেজ, যাতে অর্ডার প্রক্রিয়া
+            হয় সহজ।
+          </p>
+        </div>
+
+        <div
+          class="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6"
+        >
+          {
+            features.map((f) => (
+              <div class={`rounded-3xl border bg-gradient-to-b ${f.cardBg} ${f.borderColor} p-6 sm:p-7 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl relative overflow-hidden group shadow-sm`}>
+                <div class="flex items-center justify-between mb-5">
+                  <div class={`flex h-12 w-12 items-center justify-center rounded-2xl shadow-md ${f.iconBg} group-hover:scale-110 transition-transform`}>
+                    {f.icon === "speed" && (
+                      <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                    )}
+                    {f.icon === "cart" && (
+                      <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+                    )}
+                    {f.icon === "pixel" && (
+                      <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
+                    )}
+                    {f.icon === "shield" && (
+                      <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+                    )}
+                    {f.icon === "box" && (
+                      <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>
+                    )}
+                    {f.icon === "chart" && (
+                      <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
+                    )}
+                  </div>
+                  <span class={`text-[11px] font-bold px-2.5 py-1 rounded-full border ${f.badgeBg}`}>
+                    {f.tag}
+                  </span>
+                </div>
+                <h3 class="text-base sm:text-lg font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
+                  {f.title}
+                </h3>
+                <p class="mt-2 text-xs sm:text-sm leading-relaxed text-slate-600">
+                  {f.text}
+                </p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- PROCESS -->
+    <section id="process" class="scroll-mt-20">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20">
+        <div class="mx-auto max-w-2xl text-center">
+          <p class="text-sm font-bold text-blue-600">কাজের ধাপ</p>
+          <h2 class="mt-2 text-2xl sm:text-3xl font-extrabold text-slate-900">
+            মাত্র ৩ ধাপে আপনার পেজ রেডি
+          </h2>
+        </div>
+
+        <ol class="mt-10 grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+          {
+            steps.map((s) => (
+              <li class="rounded-2xl border border-slate-200 bg-white p-6">
+                <span class="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600 text-lg font-bold text-white">
+                  {s.n}
+                </span>
+                <h3 class="mt-4 text-lg font-bold text-slate-900">{s.title}</h3>
+                <p class="mt-1.5 text-sm leading-relaxed text-slate-600">
+                  {s.text}
+                </p>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </section>
+
+    <!-- PACKAGES -->
+    <section
+      id="packages"
+      class="scroll-mt-20 bg-slate-50 border-y border-slate-200"
+    >
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20">
+        <div class="mx-auto max-w-2xl text-center">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-50 border border-rose-200 text-rose-700 text-xs font-bold mb-2">
+            <span class="w-2 h-2 rounded-full bg-rose-600 animate-pulse"></span>
+            হক প্লাস আইটি প্রচার অফার • মাত্র ৫ জনের জন্য
+          </span>
+          <h2 class="mt-1 text-2xl sm:text-3xl font-extrabold text-slate-900">
+            একটি প্যাকেজেই আপনার সম্পূর্ণ অনলাইন সেলস সেটআপ
+          </h2>
+          <p class="mt-2.5 text-slate-600">
+            হক প্লাস আইটির প্রচার উপলক্ষে মাত্র ৫০০ টাকায় সবকিছু একসাথে পাচ্ছেন। অফারটি প্রযোজ্য কেবল প্রথম ৫ জনের জন্য।
+          </p>
+        </div>
+
+        <div class="mt-10 rounded-3xl border-2 border-blue-600 bg-white p-6 sm:p-10 shadow-xl shadow-blue-500/10">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-8 border-b border-slate-100">
+            <div>
+              <span class="inline-flex items-center gap-1.5 rounded-full bg-rose-50 border border-rose-200 px-3 py-1 text-xs font-bold text-rose-700">
+                <span class="w-1.5 h-1.5 rounded-full bg-rose-600 animate-pulse"></span>
+                প্রচার অফার • প্রথম ৫ জন পাবেন
+              </span>
+              <h3 class="mt-3 text-2xl sm:text-3xl font-extrabold text-slate-900">
+                {plan.name}
+              </h3>
+              <p class="mt-1 text-sm text-slate-600">
+                {plan.tagline} — প্রচার উপলক্ষে সীমিত সময়ের অফার।
+              </p>
+            </div>
+            <div class="md:text-right shrink-0">
+              <div class="flex items-baseline gap-1 md:justify-end">
+                <span class="text-4xl sm:text-5xl font-black text-blue-600">৳{plan.price}</span>
+                <span class="text-sm font-medium text-slate-500">/ সম্পূর্ণ এককালীন</span>
+              </div>
+              <p class="mt-1.5 text-xs text-emerald-600 font-semibold">
+                কোনো অগ্রিম পেমেন্ট নেই • ডেমো দেখে সিদ্ধান্ত নিন
+              </p>
+            </div>
+          </div>
+
+          <div class="mt-8">
+            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4">প্যাকেজে যা যা পাচ্ছেন:</h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5 sm:gap-4">
+              {plan.features.map((item) => (
+                <div class="group relative flex items-start gap-3.5 p-3.5 sm:p-4 rounded-2xl bg-white border border-slate-200/90 hover:border-blue-300 hover:shadow-md transition-all duration-200">
+                  <div class={`shrink-0 w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center transition-transform group-hover:scale-105 ${item.iconClass}`}>
+                    {item.icon === "speed" && (
+                      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                      </svg>
+                    )}
+                    {item.icon === "cart" && (
+                      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                      </svg>
+                    )}
+                    {item.icon === "pixel" && (
+                      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                      </svg>
+                    )}
+                    {item.icon === "mobile" && (
+                      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                      </svg>
+                    )}
+                    {item.icon === "shield" && (
+                      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                      </svg>
+                    )}
+                    {item.icon === "truck" && (
+                      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1" />
+                      </svg>
+                    )}
+                    {item.icon === "whatsapp" && (
+                      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                      </svg>
+                    )}
+                    {item.icon === "device" && (
+                      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                      </svg>
+                    )}
+                    {item.icon === "check" && (
+                      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    )}
+                    {item.icon === "clock" && (
+                      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    )}
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <div class="flex flex-wrap items-center justify-between gap-1.5 mb-1">
+                      <h5 class="text-sm sm:text-base font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
+                        {item.title}
+                      </h5>
+                      <span class={`inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold border ${item.badgeClass}`}>
+                        {item.badge}
+                      </span>
+                    </div>
+                    <p class="text-xs sm:text-[13px] text-slate-600 leading-relaxed">
+                      {item.desc}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div class="mt-10 pt-6 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="text-xs text-slate-500 flex flex-wrap items-center gap-3">
+              <span class="flex items-center gap-1 font-medium text-slate-700">
+                <svg class="w-4 h-4 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                ২৪ ঘণ্টার ডেলিভারি
+              </span>
+              <span>•</span>
+              <span class="flex items-center gap-1 font-medium text-slate-700">
+                <svg class="w-4 h-4 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                ২৪/৭ টেক সাপোর্ট
+              </span>
+              <span>•</span>
+              <span class="flex items-center gap-1 font-medium text-slate-700">
+                <svg class="w-4 h-4 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                ১০০% মানি-সেফ
+              </span>
+            </div>
+
+            <a
+              href="#book-landing-page"
+              class="w-full sm:w-auto px-8 py-3.5 text-center text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-md shadow-blue-500/20 transition active:scale-[0.98]"
+            >
+              {plan.cta}
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="scroll-mt-20">
+      <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20">
+        <div class="text-center">
+          <p class="text-sm font-bold text-blue-600">সাধারণ প্রশ্নোত্তর</p>
+          <h2 class="mt-2 text-2xl sm:text-3xl font-extrabold text-slate-900">
+            আপনার মনে থাকা প্রশ্নগুলো
+          </h2>
+        </div>
+
+        <div
+          class="mt-10 divide-y divide-slate-200 rounded-2xl border border-slate-200 bg-white"
+        >
+          {
+            faqs.map((f) => (
+              <details class="group p-5 sm:p-6">
+                <summary class="flex cursor-pointer list-none items-center justify-between gap-4 text-base font-bold text-slate-900 [&::-webkit-details-marker]:hidden">
+                  <span>{f.q}</span>
+                  <span class="shrink-0 text-xl text-blue-600 transition-transform group-open:rotate-45">
+                    +
+                  </span>
+                </summary>
+                <p class="mt-3 text-sm sm:text-base leading-relaxed text-slate-600">
+                  {f.a}
+                </p>
+              </details>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- FINAL CTA -->
+    <section class="px-4 sm:px-6 lg:px-8 pb-14 sm:pb-20">
+      <div
+        class="max-w-6xl mx-auto rounded-3xl bg-slate-900 px-6 py-10 sm:px-12 sm:py-14 text-center"
+      >
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-white leading-snug">
+          আজই আপনার ল্যান্ডিং পেজের কাজ শুরু করুন
+        </h2>
+        <p class="mx-auto mt-3 max-w-xl text-slate-300">
+          ডেমো দেখে সিদ্ধান্ত নিন—অগ্রিম কোনো টাকা লাগবে না।
+        </p>
+        <div
+          class="mt-7 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3"
+        >
+          <a
+            href="#book-landing-page"
+            class="rounded-xl bg-blue-600 px-7 py-3.5 text-base font-bold text-white hover:bg-blue-500"
+          >
+            অর্ডার বুক করুন
+          </a>
+          <a
+            href={waLink(
+              "Hello HaqPlus IT, I want to discuss the landing page.",
+            )}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="rounded-xl border border-slate-600 px-7 py-3.5 text-base font-bold text-white hover:bg-slate-800"
+          >
+            WhatsApp-এ কথা বলুন
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-slate-200 bg-white">
+    <div
+      class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 px-4 sm:px-6 lg:px-8 py-6 text-sm text-slate-500 font-['Hind_Siliguri',sans-serif]"
+    >
+      <p>© {new Date().getFullYear()} HaqPlus IT। সর্বস্বত্ব সংরক্ষিত।</p>
+      <p>Software &amp; Digital Agency</p>
+    </div>
+  </footer>
+
+  <FloatingWhatsApp />
+
+  <script>
+    const WA_NUMBER = "8801560007230";
+    const BN_DIGITS = "০১২৩৪৫৬৭৮৯";
+    const toEnglishDigits = (s: string) =>
+      s.replace(/[০-৯]/g, (d) => String(BN_DIGITS.indexOf(d)));
+
+    function initLeadForm() {
+      const form = document.getElementById(
+        "lead-form",
+      ) as HTMLFormElement | null;
+      if (!form || form.dataset.bound === "1") return;
+      form.dataset.bound = "1";
+
+      const wrap = document.getElementById("lead-form-wrap");
+      const success = document.getElementById("lead-success");
+      const successMsg = document.getElementById("lead-success-msg");
+      const successWa = document.getElementById(
+        "lead-success-wa",
+      ) as HTMLAnchorElement | null;
+      const resetBtn = document.getElementById("lead-reset");
+      const submitBtn = document.getElementById(
+        "lead-submit",
+      ) as HTMLButtonElement | null;
+      const btnText = document.getElementById("lead-submit-text");
+      const spinner = document.getElementById("lead-spinner");
+      const errorBox = document.getElementById("lead-error");
+      const pkgSelect = document.getElementById(
+        "lead-package",
+      ) as HTMLSelectElement | null;
+
+      const showError = (msg: string) => {
+        if (!errorBox) return;
+        errorBox.textContent = msg;
+        errorBox.classList.remove("hidden");
+      };
+      const clearError = () => errorBox?.classList.add("hidden");
+
+      // প্যাকেজ বাটনে ক্লিক করলে ফর্মে সেই প্যাকেজ সিলেক্ট হবে
+      document
+        .querySelectorAll<HTMLElement>("[data-select-package]")
+        .forEach((el) => {
+          el.addEventListener("click", () => {
+            const value = el.dataset.selectPackage;
+            if (pkgSelect && value) pkgSelect.value = value;
+          });
+        });
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        clearError();
+
+        const fd = new FormData(form);
+        const name = (fd.get("fullName") ?? "").toString().trim();
+        const rawPhone = toEnglishDigits(
+          (fd.get("phone") ?? "").toString().trim(),
+        );
+        const phone = rawPhone.replace(/[\s-]/g, "").replace(/^\+?88/, "");
+        const product =
+          (fd.get("product") ?? "").toString().trim() || "উল্লেখ করা হয়নি";
+        const pkg = (fd.get("package") ?? "").toString();
+
+        if (name.length < 2) return showError("অনুগ্রহ করে আপনার নাম লিখুন।");
+        if (!/^01[3-9]\d{8}$/.test(phone))
+          return showError(
+            "সঠিক ১১ সংখ্যার মোবাইল নম্বর দিন (যেমন: 01XXXXXXXXX)।",
+          );
+
+        const now = new Date();
+        const leadData = {
+          fullName: name,
+          phone,
+          email: "",
+          service: "ই-কমার্স ল্যান্ডিং পেজ (৳৫০০ অফার)",
+          budget: pkg,
+          message: `Product/Business: ${product} | Selected Package: ${pkg}`,
+          source: "Landing Page 500 Taka Campaign",
+          createdAt: now.toISOString(),
+          formattedDate: now.toLocaleString("en-US", {
+            timeZone: "Asia/Dhaka",
+          }),
+        };
+
+        if (submitBtn && btnText && spinner) {
+          submitBtn.disabled = true;
+          btnText.textContent = "প্রসেস হচ্ছে...";
+          spinner.classList.remove("hidden");
+        }
+
+        let saved = false;
+        try {
+          const res = await fetch("/api/lead", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(leadData),
+          });
+          saved = res.ok;
+        } catch {
+          saved = false;
+        }
+
+        if (submitBtn && btnText && spinner) {
+          submitBtn.disabled = false;
+          btnText.textContent = "অর্ডার কনফার্ম করুন";
+          spinner.classList.add("hidden");
+        }
+
+        const waText = encodeURIComponent(
+          `*নতুন ল্যান্ডিং পেজ অর্ডার*\nনাম: ${name}\nফোন: ${phone}\nপ্রোডাক্ট/পেজ: ${product}\nপ্যাকেজ: ${pkg}`,
+        );
+        if (successWa)
+          successWa.href = `https://wa.me/${WA_NUMBER}?text=${waText}`;
+        if (successMsg)
+          successMsg.textContent = saved
+            ? `ধন্যবাদ ${name}! আপনার রিকোয়েস্ট জমা হয়েছে। আমরা ${phone} নম্বরে যোগাযোগ করব।`
+            : `ধন্যবাদ ${name}! সার্ভারে সংযোগ হয়নি, তাই নিচের বাটনে চাপ দিয়ে WhatsApp-এ তথ্যটি পাঠিয়ে দিন।`;
+
+        wrap?.classList.add("hidden");
+        success?.classList.remove("hidden");
+        form.reset();
+        if (pkgSelect) pkgSelect.selectedIndex = 0;
+
+        // Redirect to dedicated Thank You page
+        setTimeout(() => {
+          const redirectUrl = `/thank-you?name=${encodeURIComponent(name)}&phone=${encodeURIComponent(phone)}&product=${encodeURIComponent(product)}`;
+          window.location.href = redirectUrl;
+        }, 600);
+      });
+
+      resetBtn?.addEventListener("click", () => {
+        success?.classList.add("hidden");
+        wrap?.classList.remove("hidden");
+      });
+    }
+
+    document.addEventListener("astro:page-load", initLeadForm);
+  </script>
+</Layout>
