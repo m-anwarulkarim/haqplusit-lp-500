@@ -208,11 +208,53 @@ const faqs = [
     a: "অর্ডার সরাসরি WhatsApp-এ আসবে এবং সঙ্গে সঙ্গে আপনার মোবাইল ড্যাশবোর্ডেও অটোমেটিক জমা হবে।",
   },
 ];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqs.map((faq) => ({
+    "@type": "Question",
+    "name": faq.q,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": faq.a,
+    },
+  })),
+};
+
+const productOfferSchema = {
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "হক প্লাস আইটি অল-ইন-ওয়ান ই-কমার্স ল্যান্ডিং পেজ",
+  "description": "কাস্টম কোডেড ০.৫ সেকেন্ড দ্রুতগতির ল্যান্ডিং পেজ, ১-ক্লিক COD চেকআউট, মেটা পিক্সেল ও CAPI, রিয়েল-টাইম মোবাইল অর্ডার ড্যাশবোর্ড, Steadfast ও Pathao কুরিয়ার অটোমেশন।",
+  "image": "https://haqplusit.site/images/hero-tech.jpg",
+  "brand": {
+    "@type": "Brand",
+    "name": "HaqPlus IT",
+  },
+  "offers": {
+    "@type": "Offer",
+    "url": "https://haqplusit.site/#packages",
+    "priceCurrency": "BDT",
+    "price": "500",
+    "priceValidUntil": "2026-12-31",
+    "itemCondition": "https://schema.org/NewCondition",
+    "availability": "https://schema.org/InStock",
+    "seller": {
+      "@type": "Organization",
+      "name": "HaqPlus IT",
+    },
+  },
+};
+
+const pageStructuredData = [faqSchema, productOfferSchema];
 ---
 
 <Layout
   title="মাত্র ৫০০ টাকায় হাই-কনভার্টিং ই-কমার্স ল্যান্ডিং পেজ | HaqPlus IT"
   description="হক প্লাস আইটি বানাচ্ছে কাস্টম কোডেড দ্রুতগতির ল্যান্ডিং পেজ। ফেসবুক পিক্সেল সেটআপ, এক ক্লিকে অর্ডার, ফেক অর্ডার ব্লকার ও কুরিয়ার ম্যানেজমেন্ট ড্যাশবোর্ড।"
+  keywords="HaqPlus IT, হক প্লাস আইটি, ল্যান্ডিং পেজ, ই-কমার্স ল্যান্ডিং পেজ, ৫00 টাকায় ল্যান্ডিং পেজ, ফেসবুক পিক্সেল সেটআপ, facebook pixel CAPI bangladesh, ক্যাশ অন ডেলিভারি ফর্ম, Steadfast courier automation, Pathao courier API, e-commerce landing page design bangladesh, web development dhaka, software digital agency bangladesh"
+  structuredData={pageStructuredData}
 >
   <Navbar />
 

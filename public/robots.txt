@@ -1,0 +1,8 @@
+# Robots.txt for HaqPlus IT (https://haqplusit.site)
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /api/
+
+# Sitemaps
+Sitemap: https://haqplusit.site/sitemap.xml

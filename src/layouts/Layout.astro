@@ -5,16 +5,83 @@ import "../styles/global.css";
 interface Props {
   title?: string;
   description?: string;
+  keywords?: string;
   image?: string;
   canonicalURL?: string;
+  noindex?: boolean;
+  structuredData?: Record<string, any> | Array<Record<string, any>>;
 }
 
 const {
-  title = "HaqPlus IT | Next-Gen Software & Digital IT Solutions",
-  description = "Transform your business with HaqPlus IT. Custom Web & Mobile App Development, E-Commerce, Cloud Architecture, UI/UX, and High-Performance Digital Solutions.",
+  title = "HaqPlus IT | মাত্র ৫০০ টাকায় হাই-কনভার্টিং ই-কমার্স ল্যান্ডিং পেজ",
+  description = "হক প্লাস আইটি বানাচ্ছে কাস্টম কোডেড দ্রুতগতির ল্যান্ডিং পেজ। ফেসবুক পিক্সেল সেটআপ, এক ক্লিকে অর্ডার, ফেক অর্ডার ব্লকার ও কুরিয়ার ম্যানেজমেন্ট ড্যাশবোর্ড।",
+  keywords = "HaqPlus IT, হক প্লাস আইটি, ল্যান্ডিং পেজ, ই-কমার্স ল্যান্ডিং পেজ, ৫00 টাকায় ল্যান্ডিং পেজ, ফেসবুক পিক্সেল সেটআপ, facebook pixel CAPI bangladesh, ক্যাশ অন ডেলিভারি ফর্ম, Steadfast courier automation, Pathao courier API, e-commerce landing page design bangladesh, web development dhaka, software digital agency bangladesh",
   image = "/images/hero-tech.jpg",
-  canonicalURL = "https://haqplusit.site",
+  canonicalURL,
+  noindex = false,
+  structuredData,
 } = Astro.props;
+
+const siteUrl = "https://haqplusit.site";
+const canonical = canonicalURL || (Astro.site ? new URL(Astro.url.pathname, Astro.site).href : `${siteUrl}${Astro.url.pathname}`);
+const ogImage = image.startsWith("http") ? image : `${siteUrl}${image.startsWith("/") ? "" : "/"}${image}`;
+
+// Core Schema.org Graph
+const coreSchema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://haqplusit.site/#organization",
+      "name": "HaqPlus IT",
+      "alternateName": "হক প্লাস আইটি",
+      "url": "https://haqplusit.site",
+      "logo": "https://haqplusit.site/favicon.svg",
+      "description": "হক প্লাস আইটি - প্রফেশনাল ই-কমার্স ল্যান্ডিং পেজ ডিজাইন, সফটওয়্যার ডেভেলপমেন্ট ও ডিজিটাল সলিউশন।",
+      "telephone": "+8801560007230",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Dhaka",
+        "addressCountry": "BD"
+      },
+      "sameAs": [
+        "https://wa.me/8801560007230"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://haqplusit.site/#website",
+      "url": "https://haqplusit.site",
+      "name": "HaqPlus IT",
+      "alternateName": "হক প্লাস আইটি",
+      "publisher": {
+        "@id": "https://haqplusit.site/#organization"
+      },
+      "inLanguage": "bn-BD"
+    },
+    {
+      "@type": "ProfessionalService",
+      "@id": "https://haqplusit.site/#service",
+      "name": "HaqPlus IT - E-Commerce Landing Page & IT Solutions",
+      "url": "https://haqplusit.site",
+      "image": ogImage,
+      "priceRange": "৳500",
+      "telephone": "+8801560007230",
+      "areaServed": {
+        "@type": "Country",
+        "name": "Bangladesh"
+      },
+      "serviceType": [
+        "E-Commerce Landing Page Development",
+        "High Speed Custom Coding",
+        "Facebook Pixel & Conversion API (CAPI) Setup",
+        "Steadfast & Pathao Courier API Automation",
+        "Live Mobile Order Management System (OMS)",
+        "Fake Order & Anti-Fraud Blocker"
+      ]
+    }
+  ]
+};
 ---
 
 <!doctype html>
@@ -27,34 +94,51 @@ const {
     <link rel="icon" href="/favicon.ico" />
     <meta name="generator" content={Astro.generator} />
 
-    <!-- SEO -->
+    <!-- Primary Meta Tags -->
     <title>{title}</title>
     <meta name="title" content={title} />
     <meta name="description" content={description} />
-    <meta
-      name="keywords"
-      content="HaqPlus IT, ল্যান্ডিং পেজ, ই-কমার্স ল্যান্ডিং পেজ, ফেসবুক পিক্সেল, Web Development Bangladesh, Dhaka IT Company"
-    />
+    <meta name="keywords" content={keywords} />
     <meta name="author" content="HaqPlus IT" />
-    <meta name="robots" content="index, follow" />
-    <link rel="canonical" href={canonicalURL} />
+    <meta name="robots" content={noindex ? "noindex, nofollow" : "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"} />
+    <link rel="canonical" href={canonical} />
 
-    <!-- Open Graph -->
+    <!-- Geo & Regional Tags -->
+    <meta name="geo.region" content="BD" />
+    <meta name="geo.placename" content="Dhaka, Bangladesh" />
+    <meta name="geo.position" content="23.8103;90.4125" />
+    <meta name="ICBM" content="23.8103, 90.4125" />
+    <meta name="language" content="Bengali, English" />
+
+    <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:site_name" content="HaqPlus IT" />
+    <meta property="og:url" content={canonical} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={image} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="HaqPlus IT E-Commerce Solutions" />
     <meta property="og:locale" content="bn_BD" />
 
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content={canonicalURL} />
-    <meta property="twitter:title" content={title} />
-    <meta property="twitter:description" content={description} />
-    <meta property="twitter:image" content={image} />
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={canonical} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:site" content="@haqplusit" />
 
-    <!-- Fonts -->
+    <!-- JSON-LD Core Structured Data -->
+    <script type="application/ld+json" set:html={JSON.stringify(coreSchema)} />
+
+    <!-- Page Specific Structured Data (if any) -->
+    {structuredData && (
+      <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+    )}
+
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
