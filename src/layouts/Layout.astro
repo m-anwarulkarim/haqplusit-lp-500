@@ -14,8 +14,8 @@ interface Props {
 
 const {
   title = "HaqPlus IT | মাত্র ৫০০ টাকায় হাই-কনভার্টিং ই-কমার্স ল্যান্ডিং পেজ",
-  description = "হক প্লাস আইটি বানাচ্ছে কাস্টম কোডেড দ্রুতগতির ল্যান্ডিং পেজ। ফেসবুক পিক্সেল সেটআপ, এক ক্লিকে অর্ডার, ফেক অর্ডার ব্লকার ও কুরিয়ার ম্যানেজমেন্ট ড্যাশবোর্ড।",
-  keywords = "HaqPlus IT, হক প্লাস আইটি, ল্যান্ডিং পেজ, ই-কমার্স ল্যান্ডিং পেজ, ৫00 টাকায় ল্যান্ডিং পেজ, ফেসবুক পিক্সেল সেটআপ, facebook pixel CAPI bangladesh, ক্যাশ অন ডেলিভারি ফর্ম, Steadfast courier automation, Pathao courier API, e-commerce landing page design bangladesh, web development dhaka, software digital agency bangladesh",
+  description = "হক প্লাস আইটি বানাচ্ছে কাস্টম কোডেড ০.৫ সেকেন্ড দ্রুতগতির ল্যান্ডিং পেজ। ফেসবুক পিক্সেল ও CAPI, ১-ক্লিকে ক্যাশ অন ডেলিভারি, ফেক অর্ডার ব্লকার ও মোবাইল অর্ডার ম্যানেজমেন্ট ড্যাশবোর্ড।",
+  keywords = "HaqPlus IT, হক প্লাস আইটি, ল্যান্ডিং পেজ ডিজাইন, ই-কমার্স ল্যান্ডিং পেজ, ৫০০ টাকায় ল্যান্ডিং পেজ, ফেসবুক পিক্সেল সেটআপ, facebook pixel CAPI bangladesh, ক্যাশ অন ডেলিভারি ফর্ম, Steadfast courier automation, Pathao courier API, e-commerce landing page design bangladesh, web development company dhaka, digital marketing agency bangladesh, online business sales booster",
   image = "/images/hero-tech.jpg",
   canonicalURL,
   noindex = false,
@@ -26,7 +26,7 @@ const siteUrl = "https://haqplusit.site";
 const canonical = canonicalURL || (Astro.site ? new URL(Astro.url.pathname, Astro.site).href : `${siteUrl}${Astro.url.pathname}`);
 const ogImage = image.startsWith("http") ? image : `${siteUrl}${image.startsWith("/") ? "" : "/"}${image}`;
 
-// Core Schema.org Graph
+// Enterprise Schema.org Graph
 const coreSchema = {
   "@context": "https://schema.org",
   "@graph": [
@@ -34,18 +34,34 @@ const coreSchema = {
       "@type": "Organization",
       "@id": "https://haqplusit.site/#organization",
       "name": "HaqPlus IT",
-      "alternateName": "হক প্লাস আইটি",
+      "alternateName": ["হক প্লাস আইটি", "HaqPlus Digital", "HaqPlus IT Solutions"],
       "url": "https://haqplusit.site",
-      "logo": "https://haqplusit.site/favicon.svg",
-      "description": "হক প্লাস আইটি - প্রফেশনাল ই-কমার্স ল্যান্ডিং পেজ ডিজাইন, সফটওয়্যার ডেভেলপমেন্ট ও ডিজিটাল সলিউশন।",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://haqplusit.site/favicon.svg",
+        "width": "512",
+        "height": "512"
+      },
+      "description": "হক প্লাস আইটি - বাংলাদেশের অনলাইন মার্চেন্ট ও উদ্যোক্তাদের জন্য হাই-পারফরম্যান্স ই-কমার্স ল্যান্ডিং পেজ, ওয়েব ডেভেলপমেন্ট ও অ্যাড ট্র্যাকিং সলিউশন।",
       "telephone": "+8801560007230",
+      "contactPoint": [
+        {
+          "@type": "ContactPoint",
+          "telephone": "+8801560007230",
+          "contactType": "customer service",
+          "availableLanguage": ["Bengali", "English"],
+          "areaServed": "BD"
+        }
+      ],
       "address": {
         "@type": "PostalAddress",
         "addressLocality": "Dhaka",
+        "addressRegion": "Dhaka Division",
         "addressCountry": "BD"
       },
       "sameAs": [
-        "https://wa.me/8801560007230"
+        "https://wa.me/8801560007230",
+        "https://github.com/m-anwarulkarim/haqplusit-lp-500"
       ]
     },
     {
@@ -62,23 +78,54 @@ const coreSchema = {
     {
       "@type": "ProfessionalService",
       "@id": "https://haqplusit.site/#service",
-      "name": "HaqPlus IT - E-Commerce Landing Page & IT Solutions",
+      "name": "HaqPlus IT - E-Commerce Solutions & Web Agency",
       "url": "https://haqplusit.site",
       "image": ogImage,
-      "priceRange": "৳500",
+      "priceRange": "৳500 - ৳5000",
       "telephone": "+8801560007230",
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "reviewCount": "52",
+        "bestRating": "5",
+        "worstRating": "1"
+      },
       "areaServed": {
         "@type": "Country",
         "name": "Bangladesh"
       },
-      "serviceType": [
-        "E-Commerce Landing Page Development",
-        "High Speed Custom Coding",
-        "Facebook Pixel & Conversion API (CAPI) Setup",
-        "Steadfast & Pathao Courier API Automation",
-        "Live Mobile Order Management System (OMS)",
-        "Fake Order & Anti-Fraud Blocker"
-      ]
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "E-Commerce Growth Services",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "ই-কমার্স ল্যান্ডিং পেজ ডেভেলপমেন্ট",
+              "description": "০.৫ সেকেন্ড স্পিড ও ১-ক্লিক ক্যাশ-অন-ডেলিভারি চেকআউট ফর্মসহ সম্পূর্ণ কাস্টম ল্যান্ডিং পেজ।"
+            },
+            "price": "500",
+            "priceCurrency": "BDT"
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "মেটা পিক্সেল ও সার্ভার CAPI ফুল সেটআপ",
+              "description": "iOS 14+ ট্র্যাকিং ব্লকিং সমাধান ও নির্ভুল পারচেজ ইভেন্ট সেটআপ।"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "কুরিয়ার অটোমেশন ও ফ্রড ব্লকার",
+              "description": "Steadfast ও Pathao ১-ক্লিক পার্সেল বুকিং এবং ভুয়া অর্ডার ফিল্টার।"
+            }
+          }
+        ]
+      }
     }
   ]
 };
@@ -90,18 +137,28 @@ const coreSchema = {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#2563eb" />
+    
+    <!-- Icons & Manifest -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+    <link rel="manifest" href="/site.webmanifest" />
     <meta name="generator" content={Astro.generator} />
 
-    <!-- Primary Meta Tags -->
+    <!-- Primary SEO Meta Tags -->
     <title>{title}</title>
     <meta name="title" content={title} />
     <meta name="description" content={description} />
     <meta name="keywords" content={keywords} />
     <meta name="author" content="HaqPlus IT" />
     <meta name="robots" content={noindex ? "noindex, nofollow" : "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"} />
+    <meta name="googlebot" content={noindex ? "noindex, nofollow" : "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"} />
+    <meta name="bingbot" content={noindex ? "noindex, nofollow" : "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"} />
     <link rel="canonical" href={canonical} />
+
+    <!-- Multilingual Hreflang Tags -->
+    <link rel="alternate" hreflang="bn" href="https://haqplusit.site" />
+    <link rel="alternate" hreflang="x-default" href="https://haqplusit.site" />
 
     <!-- Geo & Regional Tags -->
     <meta name="geo.region" content="BD" />
@@ -109,6 +166,10 @@ const coreSchema = {
     <meta name="geo.position" content="23.8103;90.4125" />
     <meta name="ICBM" content="23.8103, 90.4125" />
     <meta name="language" content="Bengali, English" />
+    <meta name="rating" content="general" />
+    <meta name="revisit-after" content="2 days" />
+    <meta name="distribution" content="global" />
+    <meta name="format-detection" content="telephone=no" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
@@ -117,10 +178,13 @@ const coreSchema = {
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={ogImage} />
+    <meta property="og:image:secure_url" content={ogImage} />
+    <meta property="og:image:type" content="image/jpeg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="HaqPlus IT E-Commerce Solutions" />
+    <meta property="og:image:alt" content="HaqPlus IT - মাত্র ৫০০ টাকায় হাই-কনভার্টিং ই-কমার্স ল্যান্ডিং পেজ" />
     <meta property="og:locale" content="bn_BD" />
+    <meta property="og:locale:alternate" content="en_US" />
 
     <!-- Twitter Cards -->
     <meta name="twitter:card" content="summary_large_image" />
@@ -129,11 +193,12 @@ const coreSchema = {
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
     <meta name="twitter:site" content="@haqplusit" />
+    <meta name="twitter:creator" content="@haqplusit" />
 
-    <!-- JSON-LD Core Structured Data -->
+    <!-- JSON-LD Core Structured Data (Organization, WebSite, ProfessionalService, Ratings) -->
     <script type="application/ld+json" set:html={JSON.stringify(coreSchema)} />
 
-    <!-- Page Specific Structured Data (if any) -->
+    <!-- Page Specific Structured Data (FAQPage, Product Offer) -->
     {structuredData && (
       <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
     )}

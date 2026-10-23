@@ -1,0 +1,22 @@
+{
+  "name": "HaqPlus IT - E-Commerce Landing Page & Digital Agency",
+  "short_name": "HaqPlus IT",
+  "description": "মাত্র ৫০০ টাকায় হাই-কনভার্টিং ই-কমার্স ল্যান্ডিং পেজ, ফেসবুক পিক্সেল ও কুরিয়ার অটোমেশন সেটআপ।",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2563eb",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    }
+  ]
+}

@@ -1,18 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
-        http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+        http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd
+        http://www.google.com/schemas/sitemap-image/1.1
+        http://www.google.com/schemas/sitemap-image/1.1/sitemap-image.xsd">
   <url>
     <loc>https://haqplusit.site/</loc>
-    <lastmod>2026-10-23T23:30:00+06:00</lastmod>
-    <changefreq>weekly</changefreq>
+    <lastmod>2026-10-24T00:00:00+06:00</lastmod>
+    <changefreq>daily</changefreq>
     <priority>1.0</priority>
-  </url>
-  <url>
-    <loc>https://haqplusit.site/thank-you</loc>
-    <lastmod>2026-10-23T23:30:00+06:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.3</priority>
+    <image:image>
+      <image:loc>https://haqplusit.site/images/hero-tech.jpg</image:loc>
+      <image:title>HaqPlus IT - E-Commerce Landing Page Development Bangladesh</image:title>
+      <image:caption>মাত্র ৫০০ টাকায় হাই-কনভার্টিং ই-কমার্স ল্যান্ডিং পেজ ও ফেসবুক পিক্সেল সেটআপ</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://haqplusit.site/images/ad-creative.jpg</image:loc>
+      <image:title>HaqPlus IT Live Order Management System</image:title>
+      <image:caption>রিয়েল-টাইম মোবাইল অর্ডার ড্যাশবোর্ড ও ১-ক্লিক ক্যাশ-অন-ডেলিভারি চেকআউট</image:caption>
+    </image:image>
   </url>
 </urlset>

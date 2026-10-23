@@ -1,8 +1,28 @@
 # Robots.txt for HaqPlus IT (https://haqplusit.site)
 User-agent: *
 Allow: /
+Allow: /_astro/
+Allow: /images/
+Allow: /favicon.svg
+Allow: /favicon.ico
 Disallow: /admin
+Disallow: /admin/
 Disallow: /api/
+Disallow: /thank-you
+Disallow: /ad-banner
+Disallow: /ad-banner-clean
 
-# Sitemaps
+# Specific Search Engines
+User-agent: Googlebot
+Allow: /
+Allow: /_astro/
+Allow: /images/
+
+User-agent: Bingbot
+Allow: /
+Allow: /_astro/
+Allow: /images/
+
+# Host and Sitemap
+Host: https://haqplusit.site
 Sitemap: https://haqplusit.site/sitemap.xml
