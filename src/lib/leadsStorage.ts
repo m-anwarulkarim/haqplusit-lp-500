@@ -20,54 +20,61 @@ export interface Lead {
 const DATA_DIR = path.join(process.cwd(), 'data');
 const DATA_FILE = path.join(DATA_DIR, 'leads.json');
 
-// Ensure directory and file exist
+// In-memory fallback for serverless edge runtimes (e.g. Cloudflare Pages / Workers)
+let memoryLeads: Lead[] = [
+  {
+    id: 'ORD-1792770542936',
+    fullName: 'রেদওয়ান আহমেদ (Sample Order)',
+    phone: '01560-007230',
+    email: 'dev.anwarul@gmail.com',
+    service: 'ই-কমার্স ল্যান্ডিং পেজ (৳৫০০ অফার)',
+    budget: '৳৯৯৯ - ফুল কন্ট্রোল প্যাক (ড্যাশবোর্ড + পিক্সেল + ফ্রড ব্লকার)',
+    timeline: '২৪ ঘণ্টা',
+    message: 'Product: Organic Honey & Dry Fruits | Package: ৳999 Full Pack',
+    status: 'in_progress',
+    notes: 'ডেমো পাঠানো হয়েছে, আগামীকাল পিক্সেল কানেক্ট করা হবে।',
+    source: 'Landing Page 500 Taka Campaign',
+    createdAt: new Date().toISOString(),
+    formattedDate: new Date().toLocaleString('en-US', { timeZone: 'Asia/Dhaka' })
+  }
+];
+
+// Ensure directory and file exist (when filesystem is accessible)
 async function ensureDataFile(): Promise<void> {
   try {
-    await fs.mkdir(DATA_DIR, { recursive: true });
-    try {
-      await fs.access(DATA_FILE);
-    } catch {
-      // Create initial array with a demo lead if completely fresh
-      const initialLeads: Lead[] = [
-        {
-          id: 'ORD-' + Date.now(),
-          fullName: 'রেদওয়ান আহমেদ (Sample Order)',
-          phone: '01560-007230',
-          email: 'dev.anwarul@gmail.com',
-          service: 'ই-কমার্স ল্যান্ডিং পেজ',
-          budget: '৳৯৯৯ - ড্যাশবোর্ড + পিক্সেল + ফেক অর্ডার ব্লকার',
-          timeline: '২৪ ঘণ্টা',
-          message: 'Product: Organic Honey & Dry Fruits | Package: ৳999 Full Pack',
-          status: 'new',
-          notes: 'কাস্টমার ফেসবুকে অ্যাড চালাবে, পিক্সেল সেটআপ ও কুরিয়ার কানেক্ট করে দিতে হবে।',
-          source: 'Landing Page Campaign',
-          createdAt: new Date().toISOString(),
-          formattedDate: new Date().toLocaleString('en-US', { timeZone: 'Asia/Dhaka' })
-        }
-      ];
-      await fs.writeFile(DATA_FILE, JSON.stringify(initialLeads, null, 2), 'utf-8');
+    if (typeof fs?.mkdir === 'function') {
+      await fs.mkdir(DATA_DIR, { recursive: true });
+      try {
+        await fs.access(DATA_FILE);
+      } catch {
+        await fs.writeFile(DATA_FILE, JSON.stringify(memoryLeads, null, 2), 'utf-8');
+      }
     }
   } catch (err) {
-    console.error('Error ensuring leads data file:', err);
+    // Expected on read-only edge runtimes like Cloudflare Pages
   }
 }
 
 export async function getAllLeads(): Promise<Lead[]> {
   await ensureDataFile();
   try {
-    const raw = await fs.readFile(DATA_FILE, 'utf-8');
-    const leads: Lead[] = JSON.parse(raw || '[]');
-    return leads;
+    if (typeof fs?.readFile === 'function') {
+      const raw = await fs.readFile(DATA_FILE, 'utf-8');
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          memoryLeads = parsed;
+          return parsed;
+        }
+      }
+    }
   } catch (err) {
-    console.error('Error reading leads:', err);
-    return [];
+    // Fall back to memoryLeads
   }
+  return memoryLeads;
 }
 
 export async function addLead(newLead: Omit<Lead, 'id' | 'status' | 'createdAt' | 'formattedDate'> & Partial<Lead>): Promise<Lead> {
-  await ensureDataFile();
-  const leads = await getAllLeads();
-
   const fullLead: Lead = {
     id: newLead.id || 'LEAD-' + Date.now(),
     fullName: newLead.fullName || 'Anonymous Client',
@@ -84,13 +91,21 @@ export async function addLead(newLead: Omit<Lead, 'id' | 'status' | 'createdAt' 
     formattedDate: newLead.formattedDate || new Date().toLocaleString('en-US', { timeZone: 'Asia/Dhaka' })
   };
 
+  const leads = await getAllLeads();
   leads.unshift(fullLead);
-  await fs.writeFile(DATA_FILE, JSON.stringify(leads, null, 2), 'utf-8');
+  memoryLeads = leads;
+
+  try {
+    if (typeof fs?.writeFile === 'function') {
+      await fs.writeFile(DATA_FILE, JSON.stringify(leads, null, 2), 'utf-8');
+    }
+  } catch (err) {
+    // Gracefully handle read-only edge environments
+  }
   return fullLead;
 }
 
 export async function updateLead(id: string, updates: Partial<Lead>): Promise<Lead | null> {
-  await ensureDataFile();
   const leads = await getAllLeads();
   const index = leads.findIndex(l => l.id === id);
   if (index === -1) return null;
@@ -98,19 +113,32 @@ export async function updateLead(id: string, updates: Partial<Lead>): Promise<Le
   leads[index] = {
     ...leads[index],
     ...updates,
-    id: leads[index].id // Ensure ID remains immutable
+    id: leads[index].id
   };
+  memoryLeads = leads;
 
-  await fs.writeFile(DATA_FILE, JSON.stringify(leads, null, 2), 'utf-8');
+  try {
+    if (typeof fs?.writeFile === 'function') {
+      await fs.writeFile(DATA_FILE, JSON.stringify(leads, null, 2), 'utf-8');
+    }
+  } catch (err) {
+    // Gracefully handle read-only edge environments
+  }
   return leads[index];
 }
 
 export async function deleteLead(id: string): Promise<boolean> {
-  await ensureDataFile();
   const leads = await getAllLeads();
   const filtered = leads.filter(l => l.id !== id);
   if (filtered.length === leads.length) return false;
 
-  await fs.writeFile(DATA_FILE, JSON.stringify(filtered, null, 2), 'utf-8');
+  memoryLeads = filtered;
+  try {
+    if (typeof fs?.writeFile === 'function') {
+      await fs.writeFile(DATA_FILE, JSON.stringify(filtered, null, 2), 'utf-8');
+    }
+  } catch (err) {
+    // Gracefully handle read-only edge environments
+  }
   return true;
 }
